@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package usage.v1;
+
+option go_package = "github.com/usage-spec/usage-go/proto/usage/v1";
+
+service UsageSubstrateCore {
+  rpc UsageSpawn(SpawnRequest) returns (SpawnResponse);
+  rpc UsageYield(YieldRequest) returns (YieldResponse);
+  rpc UsageSignal(SignalRequest) returns (SignalResponse);
+  rpc UsageMemPageOut(PageOutRequest) returns (PageOutResponse);
+  rpc UsageCallTool(ToolRequest) returns (ToolResponse);
+}
+
+enum AgentState {
+  AGENT_STATE_UNSPECIFIED = 0;
+  AGENT_STATE_PENDING = 1;
+  AGENT_STATE_ACTIVE = 2;
+  AGENT_STATE_THINKING = 3;
+  AGENT_STATE_PAUSED = 4;
+  AGENT_STATE_TERMINATED = 5;
+}
+
+enum AgentSignal {
+  AGENT_SIGNAL_UNSPECIFIED = 0;
+  AGENT_SIGNAL_PAUSE = 1;
+  AGENT_SIGNAL_INTERRUPT = 2;
+  AGENT_SIGNAL_TERMINATE = 3;
+}
+
+enum MemoryTier {
+  MEMORY_TIER_UNSPECIFIED = 0;
+  MEMORY_TIER_L2_WARM = 1;
+  MEMORY_TIER_L3_COLD = 2;
+}
+
+enum CascadeMode {
+  CASCADE_MODE_UNSPECIFIED = 0;
+  CASCADE_MODE_NONE = 1;
+  CASCADE_MODE_CHILDREN = 2;
+  CASCADE_MODE_SUBTREE = 3;
+}
+
+message QuotaSpec {
+  uint64 max_tokens = 1;
+  uint32 max_concurrent_tools = 2;
+  uint32 max_recursion_depth = 3;
+}
+
+message SpawnRequest {
+  string request_id = 1;
+  string parent_session_id = 2;
+  string sovereign_agent_ref = 3;
+  repeated string capabilities = 4;
+  map<string, string> environment = 5;
+  QuotaSpec quota = 6;
+  string policy_bundle_version = 7;
+  CascadeMode cascade_mode = 8;
+}
+
+message SpawnResponse {
+  string session_id = 1;
+  AgentState state = 2;
+  string supervision_path = 3;
+  int64 started_unix_ms = 4;
+}
+
+message YieldRequest {
+  string request_id = 1;
+  string session_id = 2;
+  bytes checkpoint_blob = 3;
+  uint64 tokens_consumed = 4;
+  string checkpoint_reason = 5;
+}
+
+message YieldResponse {
+  bool accepted = 1;
+  string checkpoint_id = 2;
+  AgentState state = 3;
+}
+
+message SignalRequest {
+  string request_id = 1;
+  string session_id = 2;
+  AgentSignal signal = 3;
+  uint64 sequence = 4;
+  string reason = 5;
+}
+
+message SignalResponse {
+  bool delivered = 1;
+  AgentState new_state = 2;
+  int64 transition_unix_ms = 3;
+}
+
+message MemoryPage {
+  string page_id = 1;
+  string content_hash = 2;
+  string sensitivity = 3;
+  bytes payload = 4;
+}
+
+message PageOutRequest {
+  string request_id = 1;
+  string session_id = 2;
+  MemoryTier target_tier = 3;
+  repeated MemoryPage pages = 4;
+}
+
+message PageOutReference {
+  string page_id = 1;
+  string reference = 2;
+}
+
+message PageOutResponse {
+  MemoryTier tier = 1;
+  repeated PageOutReference references = 2;
+  int64 completed_unix_ms = 3;
+}
+
+message ToolRequest {
+  string request_id = 1;
+  string session_id = 2;
+  string tool_name = 3;
+  string tool_version = 4;
+  bytes arguments_json = 5;
+  string idempotency_key = 6;
+  uint32 timeout_ms = 7;
+}
+
+message ToolResponse {
+  bool success = 1;
+  bytes result_json = 2;
+  string error_code = 3;
+  string error_message = 4;
+  uint32 latency_ms = 5;
+  string policy_decision_id = 6;
+}

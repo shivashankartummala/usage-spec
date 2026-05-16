@@ -1,0 +1,55 @@
+name: usage-spec-check
+
+on:
+  pull_request:
+    paths:
+      - 'README.md'
+      - 'proto/**'
+      - 'schemas/**'
+      - 'examples/**'
+      - 'spec/**'
+      - 'crds/**'
+      - 'compliance-tests/**'
+      - 'tools/**'
+      - 'Makefile'
+      - '.github/workflows/spec-check.yml'
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'README.md'
+      - 'proto/**'
+      - 'schemas/**'
+      - 'examples/**'
+      - 'spec/**'
+      - 'crds/**'
+      - 'compliance-tests/**'
+      - 'tools/**'
+      - 'Makefile'
+      - '.github/workflows/spec-check.yml'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler jq ripgrep
+
+      - name: Show tools
+        run: make tools
+
+      - name: Run full spec checks
+        run: make check

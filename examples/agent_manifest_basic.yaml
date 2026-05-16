@@ -1,0 +1,48 @@
+# USAGE Agent Manifest Example: Basic Research Assistant
+# This is a minimal but fully functional agent manifest for a research-focused assistant.
+
+apiVersion: usage.io/v1
+kind: SovereignAgent
+
+metadata:
+  name: research-assistant
+  labels:
+    environment: production
+    team: research
+    domain: knowledge-synthesis
+
+spec:
+  runtime:
+    profile: standard
+    maxTokensQuota: 10000000      # 10M tokens per session
+    maxConcurrentSessions: 3       # Allow up to 3 parallel sessions
+    sessionTimeoutSeconds: 3600    # 1 hour timeout
+
+  security:
+    sandboxLevel: moderate         # Balanced isolation
+    allowedTools:
+      - web.search                 # Search the internet
+      - web.fetch                  # Fetch full pages
+      - database.query             # Query structured data
+      - file.read                  # Read files from workspace
+    networkAccess: restricted      # Only approved domains
+    fileSystemAccess: read-only    # Read-only workspace access
+
+  memory:
+    l1ContextWindow: 100000                              # 100K token context window
+    l2CacheProvider: "redis://cache.internal:6379"     # Warm cache backend
+    l3ColdStorageProvider: "s3://usage-buckets/research-agent-sessions"  # Cold storage
+    l2CachePolicy: lru                                  # Least-recently-used eviction
+
+  identity:
+    modelId: claude-3.5-sonnet
+    systemPrompt: |
+      You are a research assistant focused on synthesizing knowledge from disparate sources.
+      Your strengths: information retrieval, synthesis, and clear explanation.
+      Your constraints: do not make up data; cite sources; acknowledge uncertainty.
+    authMethod: api-key
+
+  monitoring:
+    loggingLevel: info
+    metricsEnabled: true
+    tracingEnabled: false

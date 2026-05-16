@@ -1,0 +1,26 @@
+apiVersion: usage.myelin.ax/v1alpha1
+kind: SovereignAgent
+metadata:
+  name: customer-support-agent
+  namespace: usage-system
+spec:
+  identity:
+    spiffeIDTemplate: spiffe://example.org/ns/{{namespace}}/sa/{{serviceAccount}}
+    serviceAccountName: sa-customer-support
+  modelRouting:
+    primaryModel: gpt-5.4
+    fallbackModels:
+      - gpt-5.4-mini
+  quotas:
+    maxTokensPerSession: 400000
+    maxConcurrentTools: 3
+    maxRecursionDepth: 8
+  toolRegistry:
+    allow:
+      - search.customer-kb@v1
+      - ticket.create@v2
+      - pii.redact@v1
+  governance:
+    policyBundleRef: policy-bundle-v12
+    redactionProfile: strict
+    defaultCascadeMode: CHILDREN

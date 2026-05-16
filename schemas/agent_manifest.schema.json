@@ -1,0 +1,296 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://usage-spec.io/schemas/agent_manifest.schema.json",
+  "title": "USAGE Agent Manifest Schema",
+  "description": "JSON Schema (Draft 7) for USAGE-compliant agent deployment manifests. Defines the structure, constraints, and validation rules for AgentManifest.yaml files that describe autonomous agent workloads.",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "description": "API version of the manifest specification. Currently must be 'usage.io/v1' for USAGE v1.0 compliance.",
+      "enum": ["usage.io/v1"],
+      "examples": ["usage.io/v1"]
+    },
+    "kind": {
+      "type": "string",
+      "description": "Kind identifies the type of resource being defined. Must be 'SovereignAgent' for agent workload manifests.",
+      "enum": ["SovereignAgent"],
+      "examples": ["SovereignAgent"]
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Metadata provides identifying and organizational information about the agent.",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name is the unique identifier for this agent within its namespace. Must be a valid DNS subdomain name (lowercase alphanumeric and hyphens only).",
+          "pattern": "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$",
+          "minLength": 1,
+          "maxLength": 63,
+          "examples": ["research-agent", "data-analyzer", "code-reviewer"]
+        },
+        "labels": {
+          "type": "object",
+          "description": "Labels are key-value pairs for organizing and selecting agents. Common label categories: environment (dev, staging, prod), team (data-science, platform), and domain (nlp, vision, agentic).",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9._-]*$",
+            "maxLength": 63
+          },
+          "examples": [
+            {
+              "environment": "production",
+              "team": "research",
+              "domain": "nlp"
+            }
+          ]
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "description": "Spec defines the runtime configuration, security model, and resource constraints for the agent.",
+      "required": ["runtime", "security", "memory"],
+      "additionalProperties": false,
+      "properties": {
+        "runtime": {
+          "type": "object",
+          "description": "Runtime specifies the agent's execution profile and resource quotas.",
+          "required": ["profile", "maxTokensQuota"],
+          "additionalProperties": false,
+          "properties": {
+            "profile": {
+              "type": "string",
+              "description": "Profile is a named runtime configuration template. Predefined profiles: 'lightweight' (single-turn, <1M tokens), 'standard' (multi-turn, <10M tokens), 'heavyweight' (long-running, <100M tokens), 'custom' (user-defined constraints).",
+              "enum": ["lightweight", "standard", "heavyweight", "custom"],
+              "examples": ["standard"]
+            },
+            "maxTokensQuota": {
+              "type": "integer",
+              "description": "MaxTokensQuota is the maximum number of tokens the agent is allowed to consume per session. Enforced by the runtime; exceeding this quota triggers termination with SIG_AGENT_TERMINATE.",
+              "minimum": 1,
+              "maximum": 1000000000,
+              "examples": [1000000, 10000000, 100000000]
+            },
+            "maxConcurrentSessions": {
+              "type": "integer",
+              "description": "MaxConcurrentSessions limits the number of simultaneous agent instances. Defaults to 1. Set to 0 for unlimited.",
+              "minimum": 0,
+              "default": 1,
+              "examples": [1, 10, 100]
+            },
+            "sessionTimeoutSeconds": {
+              "type": "integer",
+              "description": "SessionTimeoutSeconds is the maximum wall-clock time an agent session can run. After this duration, the substrate sends SIG_AGENT_TERMINATE. Set to 0 for no timeout (not recommended for production).",
+              "minimum": 0,
+              "default": 3600,
+              "examples": [300, 3600, 86400]
+            }
+          }
+        },
+        "security": {
+          "type": "object",
+          "description": "Security specifies the agent's security isolation level and authorized tool capabilities.",
+          "required": ["sandboxLevel", "allowedTools"],
+          "additionalProperties": false,
+          "properties": {
+            "sandboxLevel": {
+              "type": "string",
+              "description": "SandboxLevel defines the strength of security isolation. 'strict' (maximum isolation, minimal substrate access), 'moderate' (balanced isolation), 'permissive' (minimal isolation, broad substrate access). Defaults to 'moderate'.",
+              "enum": ["strict", "moderate", "permissive"],
+              "default": "moderate",
+              "examples": ["strict"]
+            },
+            "allowedTools": {
+              "type": "array",
+              "description": "AllowedTools is a list of tool registry names the agent is permitted to invoke. Tool names follow the pattern 'namespace.tool_name'. The substrate denies invocations of unlisted tools at the UsageCallTool boundary.",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+\\.[a-z0-9._-]+$",
+                "minLength": 3,
+                "maxLength": 255
+              },
+              "minItems": 0,
+              "examples": [
+                [
+                  "web.search",
+                  "database.query",
+                  "code.execute"
+                ]
+              ]
+            },
+            "requiresApprovalFor": {
+              "type": "array",
+              "description": "RequiresApprovalFor is an optional list of tool names that require explicit human approval before execution. Useful for high-risk operations (system writes, financial transactions).",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+\\.[a-z0-9._-]+$"
+              },
+              "examples": [
+                [
+                  "database.write",
+                  "finance.transfer"
+                ]
+              ]
+            },
+            "networkAccess": {
+              "type": "string",
+              "description": "NetworkAccess specifies the agent's outbound network permissions. 'none' (no external network), 'restricted' (approved domains only), 'open' (unrestricted). Defaults to 'restricted'.",
+              "enum": ["none", "restricted", "open"],
+              "default": "restricted"
+            },
+            "fileSystemAccess": {
+              "type": "string",
+              "description": "FileSystemAccess specifies the agent's file system permissions. 'none' (no access), 'read-only' (read-only access to workspace), 'read-write' (read-write access to workspace). Defaults to 'read-only'.",
+              "enum": ["none", "read-only", "read-write"],
+              "default": "read-only"
+            }
+          }
+        },
+        "memory": {
+          "type": "object",
+          "description": "Memory specifies the agent's memory configuration across the three-tier storage model.",
+          "required": ["l1ContextWindow", "l2CacheProvider"],
+          "additionalProperties": false,
+          "properties": {
+            "l1ContextWindow": {
+              "type": "integer",
+              "description": "L1ContextWindow is the size of the hot, in-process context window in tokens. Limited by the model's maximum context length. Common values: 8000 (GPT-3.5), 100000 (GPT-4 Turbo), 200000 (advanced models).",
+              "minimum": 1,
+              "maximum": 1000000,
+              "examples": [8000, 100000, 200000]
+            },
+            "l2CacheProvider": {
+              "type": "string",
+              "description": "L2CacheProvider is a URI pointing to the warm cache backend. Format: 'provider://host:port/path'. Examples: 'redis://cache-server:6379', 'postgres://pgvector-db:5432/embeddings', 'local://tmp/cache'.",
+              "format": "uri",
+              "examples": [
+                "redis://cache-server:6379",
+                "postgres://pgvector-db:5432/embeddings",
+                "local://tmp/cache"
+              ]
+            },
+            "l3ColdStorageProvider": {
+              "type": "string",
+              "description": "L3ColdStorageProvider is a URI pointing to the cold storage backend. Format: 'provider://bucket/path'. Examples: 's3://my-bucket/agents/session-data', 'gcs://my-bucket/cold-storage', 'file:///persistent/storage'.",
+              "format": "uri",
+              "examples": [
+                "s3://my-bucket/agents/session-data",
+                "gcs://my-bucket/cold-storage",
+                "file:///persistent/storage"
+              ]
+            },
+            "l2CachePolicy": {
+              "type": "string",
+              "description": "L2CachePolicy defines the eviction strategy for warm cache. 'lru' (least-recently-used), 'lfu' (least-frequently-used), 'ttl' (time-to-live). Defaults to 'lru'.",
+              "enum": ["lru", "lfu", "ttl"],
+              "default": "lru"
+            },
+            "l2CacheTtlSeconds": {
+              "type": "integer",
+              "description": "L2CacheTtlSeconds defines the time-to-live for items in the warm cache (if L2CachePolicy is 'ttl'). Set to 0 for indefinite TTL.",
+              "minimum": 0,
+              "default": 86400,
+              "examples": [3600, 86400, 604800]
+            }
+          }
+        },
+        "identity": {
+          "type": "object",
+          "description": "Identity specifies the agent's identity context and authentication configuration.",
+          "additionalProperties": false,
+          "properties": {
+            "modelId": {
+              "type": "string",
+              "description": "ModelId is the identifier of the LLM backing the agent. Examples: 'claude-3.5-sonnet', 'gpt-4-turbo', 'open-llama-70b'.",
+              "examples": ["claude-3.5-sonnet", "gpt-4-turbo"]
+            },
+            "systemPrompt": {
+              "type": "string",
+              "description": "SystemPrompt is the system-level instruction provided to the model. This defines the agent's core personality and behavioral constraints.",
+              "examples": ["You are a helpful research assistant..."]
+            },
+            "authMethod": {
+              "type": "string",
+              "description": "AuthMethod specifies how the agent authenticates with the substrate. 'api-key' (API key), 'oauth' (OAuth 2.0), 'service-account' (service account), 'mTLS' (mutual TLS).",
+              "enum": ["api-key", "oauth", "service-account", "mTLS"],
+              "examples": ["api-key"]
+            }
+          }
+        },
+        "monitoring": {
+          "type": "object",
+          "description": "Monitoring specifies observability and logging configuration for the agent.",
+          "additionalProperties": false,
+          "properties": {
+            "loggingLevel": {
+              "type": "string",
+              "description": "LoggingLevel controls verbosity of runtime logs. 'debug' (detailed), 'info' (informational), 'warn' (warnings and errors), 'error' (errors only).",
+              "enum": ["debug", "info", "warn", "error"],
+              "default": "info"
+            },
+            "metricsEnabled": {
+              "type": "boolean",
+              "description": "MetricsEnabled controls whether runtime metrics (latency, token consumption, etc.) are collected and exported.",
+              "default": true
+            },
+            "tracingEnabled": {
+              "type": "boolean",
+              "description": "TracingEnabled controls whether distributed tracing (e.g., via OpenTelemetry) is enabled for this agent.",
+              "default": false
+            }
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "apiVersion": "usage.io/v1",
+      "kind": "SovereignAgent",
+      "metadata": {
+        "name": "research-assistant",
+        "labels": {
+          "environment": "production",
+          "team": "research",
+          "domain": "nlp"
+        }
+      },
+      "spec": {
+        "runtime": {
+          "profile": "standard",
+          "maxTokensQuota": 10000000,
+          "maxConcurrentSessions": 5,
+          "sessionTimeoutSeconds": 3600
+        },
+        "security": {
+          "sandboxLevel": "moderate",
+          "allowedTools": [
+            "web.search",
+            "database.query",
+            "file.read"
+          ],
+          "networkAccess": "restricted"
+        },
+        "memory": {
+          "l1ContextWindow": 100000,
+          "l2CacheProvider": "redis://cache-server:6379",
+          "l3ColdStorageProvider": "s3://my-bucket/agents/session-data",
+          "l2CachePolicy": "lru"
+        },
+        "identity": {
+          "modelId": "claude-3.5-sonnet",
+          "authMethod": "api-key"
+        },
+        "monitoring": {
+          "loggingLevel": "info",
+          "metricsEnabled": true
+        }
+      }
+    }
+  ]
+}

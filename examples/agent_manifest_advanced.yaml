@@ -1,0 +1,76 @@
+# USAGE Agent Manifest Example: Advanced Data Analytics Agent
+# This example demonstrates the full feature set of the agent manifest schema.
+
+apiVersion: usage.io/v1
+kind: SovereignAgent
+
+metadata:
+  name: analytics-engine-prod
+  labels:
+    environment: production
+    team: data-science
+    domain: analytics
+    version: "2.1"
+    cost-center: "data-infra"
+
+spec:
+  runtime:
+    profile: heavyweight           # Long-running, compute-intensive workload
+    maxTokensQuota: 100000000      # 100M tokens per session (high-capacity model)
+    maxConcurrentSessions: 10      # Allow high parallelism
+    sessionTimeoutSeconds: 86400   # 24 hours for long-running analyses
+
+  security:
+    sandboxLevel: strict           # Maximum isolation for sensitive financial data
+    allowedTools:
+      - database.query             # Read financial databases
+      - database.list-tables       # Schema introspection
+      - analytics.bigquery         # BigQuery for large-scale queries
+      - analytics.pandas           # Pandas for in-memory data manipulation
+      - visualization.plot         # Generate charts and visualizations
+      - file.read                  # Read input data files
+      - file.write                 # Write analysis results
+      - cache.store                # Store intermediate results
+      - cache.retrieve             # Retrieve cached results
+    requiresApprovalFor:
+      - database.write             # Require approval for writes
+      - file.delete                # Require approval for deletions
+    networkAccess: restricted      # Only internal data services
+    fileSystemAccess: read-write   # Full workspace access for analytics
+
+  memory:
+    l1ContextWindow: 200000                                    # 200K token context (GPT-4 Turbo level)
+    l2CacheProvider: "postgres://pgvector-db.internal:5432/embeddings"  # PostgreSQL with pgvector for semantic search
+    l3ColdStorageProvider: "gcs://analytics-sessions/storage" # Google Cloud Storage for long-term storage
+    l2CachePolicy: lfu                                         # Least-frequently-used for predictable access patterns
+    l2CacheTtlSeconds: 604800                                  # 7-day TTL for warm cache items
+
+  identity:
+    modelId: claude-3-opus        # Most capable model for complex analysis
+    systemPrompt: |
+      You are an expert data analyst specializing in financial analytics and business intelligence.
+      
+      Your core responsibilities:
+      1. Execute complex SQL queries and analyze results
+      2. Perform statistical analysis and produce rigorous insights
+      3. Visualize data trends and anomalies
+      4. Generate actionable business recommendations
+      
+      Requirements:
+      - Validate all data before analysis
+      - Cite data sources explicitly
+      - Highlight statistical significance and confidence intervals
+      - Flag potential data quality issues
+      - Explain complex analyses in business terms
+      
+      Red lines:
+      - Do not extrapolate beyond data boundaries
+      - Do not recommend financial actions (only provide analysis)
+      - Do not access unauthorized databases
+      - Do not expose sensitive PII in results
+    authMethod: service-account
+
+  monitoring:
+    loggingLevel: debug            # Verbose logging for audit trail
+    metricsEnabled: true           # Track latency, query cost, etc.
+    tracingEnabled: true           # Distributed tracing for debugging
