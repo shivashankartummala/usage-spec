@@ -2,7 +2,7 @@
 
 Adopted from: https://github.com/cncf/foundation/blob/main/code-of-conduct.md
 
-The USAGE project adheres to the CNCF Code of Conduct. By participating, you agree to uphold 
+The USAGIX project adheres to the CNCF Code of Conduct. By participating, you agree to uphold 
 this code.
 
 ## Our Pledge

@@ -1,10 +1,10 @@
-# USAGE Architectural Diagrams
+# USAGIX Architectural Diagrams
 
-This document contains formal architectural diagrams that visualize the USAGE specification's core concepts, boundaries, and operational flows.
+This document contains formal architectural diagrams that visualize the USAGIX specification's core concepts, boundaries, and operational flows.
 
 ---
 
-## Diagram 1: The USAGE Protocol Stack (Abstraction Layers)
+## Diagram 1: The USAGIX Protocol Stack (Abstraction Layers)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -18,7 +18,7 @@ This document contains formal architectural diagrams that visualize the USAGE sp
 │  │  • Decision Logic & Planning                                   │ │
 │  │  • Tool Invocation Requests                                    │ │
 │  │  • Memory Management Calls                                     │ │
-│  │  • State Serialization (UsageYield)                            │ │
+│  │  • State Serialization (UsagixYield)                            │ │
 │  │                                                                │ │
 │  │  Responsibility: Pure reasoning and semantic decision-making   │ │
 │  └────────────────────────────────────────────────────────────────┘ │
@@ -46,7 +46,7 @@ This document contains formal architectural diagrams that visualize the USAGE sp
 │  LAYER 2: RUNTIME & EXECUTION                                       │
 │  ┌────────────────────────────────────────────────────────────────┐ │
 │  │  • State Machine Enforcement (PENDING → ACTIVE → THINKING...)  │ │
-│  │  • Checkpoint Management (UsageYield, resumption)              │ │
+│  │  • Checkpoint Management (UsagixYield, resumption)              │ │
 │  │  • Memory Tier Virtualization (L1/L2/L3 management)            │ │
 │  │  • Process Lifecycle (spawn, pause, terminate)                 │ │
 │  │  • Signal Handling (SIG_AGENT_TERMINATE, SIG_AGENT_PAUSE)      │ │
@@ -90,7 +90,7 @@ This document contains formal architectural diagrams that visualize the USAGE sp
 └─────────────────────────────────────────────────────────────────────┘
 
 KEY INSIGHT:
-USAGE standardizes Layers 2-4, allowing agents to execute identically
+USAGIX standardizes Layers 2-4, allowing agents to execute identically
 on any SAL-compliant substrate, just as POSIX allows applications to
 run on any POSIX-compliant kernel.
 ```
@@ -114,15 +114,15 @@ run on any POSIX-compliant kernel.
 │  │  ║  LLM Model Inference (Claude, GPT, Llama, etc.)           ║ │ │
 │  │  ║  - Token generation & reasoning                           ║ │ │
 │  │  ║  - Tool invocation calls (gRPC stubs to localhost:50051)  ║ │ │
-│  │  ║  - UsageYield for checkpointing                           ║ │ │
-│  │  ║  - UsageMemPageOut/In for memory management               ║ │ │
+│  │  ║  - UsagixYield for checkpointing                           ║ │ │
+│  │  ║  - UsagixMemPageOut/In for memory management               ║ │ │
 │  │  ╚═══════════════════════════════════════════════════════════╝ │ │
 │  │                          │                                      │ │
 │  │                          │  gRPC calls to                       │ │
 │  │                          │  localhost:50051                     │ │
 │  │                          ▼                                      │ │
 │  │  ┌─────────────────────────────────────────────────────────┐  │ │
-│  │  │  gRPC Client Stubs (UsageSubstrateCore client)           │  │ │
+│  │  │  gRPC Client Stubs (UsagixSubstrateCore client)           │  │ │
 │  │  │  - All outbound RPC bound to 127.0.0.1:50051            │  │ │
 │  │  │  - NO OTHER network access permitted                     │  │ │
 │  │  │  - Loopback only; no egress to internet/cluster network  │  │ │
@@ -144,13 +144,13 @@ run on any POSIX-compliant kernel.
 │  │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━   │ │
 │  │                                                                  │ │
 │  │  ╔═══════════════════════════════════════════════════════════╗ │ │
-│  │  ║  UsageSubstrateCore gRPC Service (Layer 2 Runtime)        ║ │ │
+│  │  ║  UsagixSubstrateCore gRPC Service (Layer 2 Runtime)        ║ │ │
 │  │  ║                                                           ║ │ │
 │  │  ║  1. Receive gRPC RPC from agent-brain (50051)            ║ │ │
 │  │  ║                                                           ║ │ │
 │  │  ║  2. HALT agent computation thread (state preserved)      ║ │ │
 │  │  ║                                                           ║ │ │
-│  │  ║  3. Extract UsageCallTool requests                       ║ │ │
+│  │  ║  3. Extract UsagixCallTool requests                       ║ │ │
 │  │  ║                                                           ║ │ │
 │  │  ║  4. OUT-OF-BAND GOVERNANCE EVALUATION:                   ║ │ │
 │  │  ║     ┌──────────────────────────────────────────┐          ║ │ │
@@ -174,8 +174,8 @@ run on any POSIX-compliant kernel.
 │  │  ║                                                           ║ │ │
 │  │  ║  7. RESUME agent computation thread with result          ║ │ │
 │  │  ║                                                           ║ │ │
-│  │  ║  Manages: UsageSpawn, UsageYield, UsageSignal,            ║ │ │
-│  │  ║            UsageCallTool, UsageMemPageOut/In              ║ │ │
+│  │  ║  Manages: UsagixSpawn, UsagixYield, UsagixSignal,            ║ │ │
+│  │  ║            UsagixCallTool, UsagixMemPageOut/In              ║ │ │
 │  │  ╚═══════════════════════════════════════════════════════════╝ │ │
 │  │                          ▲                                      │ │
 │  │                          │  Egress to external services         │ │
@@ -205,7 +205,7 @@ against the agent's capability set before execution.
 
 ---
 
-## Diagram 3: The USAGE State Machine (Behavior & Transitions)
+## Diagram 3: The USAGIX State Machine (Behavior & Transitions)
 
 ```
                            ┌──────────────────┐
@@ -242,7 +242,7 @@ against the agent's capability set before execution.
        ┌──────────────┼──────────────┐
        │              │              │
        │ (SIG_PAUSE)  │ (timeout)    │ (SIG_TERMINATE)
-       │ (UsageYield) │              │
+       │ (UsagixYield) │              │
        ▼              ▼              ▼
       ┌─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐
       │  Illegal Transitions:         │
@@ -260,7 +260,7 @@ LEGAL TRANSITIONS (v2.0):
 │ PENDING      │ Identity OK  │ ACTIVE       │ Substrate auth  │
 │ ACTIVE       │ Begin work   │ THINKING     │ Start inference │
 │ ACTIVE       │ Cold-start   │ PAUSED       │ NEW in v2       │
-│ THINKING     │ UsageYield   │ PAUSED       │ Checkpoint now  │
+│ THINKING     │ UsagixYield   │ PAUSED       │ Checkpoint now  │
 │ THINKING     │ Loop         │ THINKING     │ Keep reasoning  │
 │ THINKING     │ Token quota  │ TERMINATED   │ Budget exceeded │
 │ PAUSED       │ Resume       │ THINKING     │ Restore context │
@@ -272,7 +272,7 @@ INVARIANT ENFORCEMENT:
 • No silent state violations (substrate rejects illegal transitions)
 • Token budget monotonicity (consumed ≤ budget always)
 • State snapshot consistency (checkpoint header + opaque payload)
-• Capability enforcement at tool boundary (UsageCallTool)
+• Capability enforcement at tool boundary (UsagixCallTool)
 • Signal atomicity (state transition is all-or-nothing)
 • No concurrent state (one session = one state at a time)
 ```
@@ -287,7 +287,7 @@ TIME ─────────────────────────
 Agent Process (THINKING)              Myelin Proxy (Substrate)        External Tool
        │                                    │                              │
        │  1. Model inference yields         │                              │
-       │     UsageCallTool request          │                              │
+       │     UsagixCallTool request          │                              │
        │    (tool: "web.search",            │                              │
        │     args: {query: "..."})          │                              │
        │───────────────────────────────────>│                              │
@@ -400,13 +400,13 @@ KEY SECURITY BOUNDARIES:
         │  L1 CONTEXT    │          │  MEMORY        │
         │  WINDOW        │          │  OPERATIONS    │
         │  (8K-200K      │          │                │
-        │   tokens)      │          │ • UsageMemPageOut
+        │   tokens)      │          │ • UsagixMemPageOut
         │                │          │   (evict L1→L2)
         │ • Current      │          │                │
-        │   inference    │          │ • UsageMemPageIn
+        │   inference    │          │ • UsagixMemPageIn
         │   history      │          │   (hydrate L2→L1)
         │ • Active       │          │                │
-        │   context      │          │ • UsageYield
+        │   context      │          │ • UsagixYield
         │ • Working set  │          │   (checkpoint) │
         └────────┬───────┘          └────────────────┘
                  │
@@ -452,7 +452,7 @@ Agent (in THINKING)
     │
     ├─ Inference reaches token limit in L1
     │
-    └─> UsageMemPageOut(
+    └─> UsagixMemPageOut(
             source=L1,
             target=L2,
             token_payload=<serialized context>
@@ -481,7 +481,7 @@ PAGEIN FLOW (L2 → L1 or L3 → L1):
 
 Agent needs historical context during THINKING
     │
-    ├─ Requests: UsageMemPageIn(
+    ├─ Requests: UsagixMemPageIn(
             source=L2,
             target=L1,
             address_reference="redis://127.0.0.1:6379/session-abc-chunk-42"
@@ -515,7 +515,7 @@ YIELD & CHECKPOINT FLOW:
 
 Agent exhausted reasoning capacity
     │
-    └─> UsageYield(
+    └─> UsagixYield(
             checkpoint={
                 header: {
                     format_version: "1.0",
@@ -568,7 +568,7 @@ CONSISTENCY INVARIANTS:
 
 ## Summary
 
-These diagrams formalize the USAGE specification's:
+These diagrams formalize the USAGIX specification's:
 
 1. **Abstraction Layers**: Clean separation of concerns (cognitive, governance, runtime, substrate)
 2. **Isolation Boundaries**: Explicit walls showing what is trusted vs. untrusted
@@ -576,4 +576,4 @@ These diagrams formalize the USAGE specification's:
 4. **Security Flows**: Step-by-step tool execution with governance & scrubbing
 5. **Memory Management**: Three-tier virtualization with demand paging
 
-Each diagram emphasizes the standardization boundary (USAGE ASI) that enables agents to execute identically across heterogeneous substrates while maintaining strict security and governance guarantees.
+Each diagram emphasizes the standardization boundary (USAGIX ASI) that enables agents to execute identically across heterogeneous substrates while maintaining strict security and governance guarantees.

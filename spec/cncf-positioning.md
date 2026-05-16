@@ -1,7 +1,7 @@
 # CNCF Positioning Strategy
 
 ## Ecosystem Fit
-USAGE complements, not replaces:
+USAGIX complements, not replaces:
 - Kubernetes runtime interfaces (CRI/CNI/CSI)
 - OCI runtime contracts
 - OpenTelemetry observability standards

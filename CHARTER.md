@@ -1,8 +1,8 @@
-# USAGE Specification Charter
+# USAGIX Specification Charter
 
 ## Mission
 
-The USAGE specification defines an open standard for agent governance, enabling safe, auditable, and interoperable AI systems across diverse infrastructure platforms. USAGE serves as the semantic foundation for agent trust domains, governance policies, and capability-based access control—enabling organizations to deploy sophisticated AI applications with confidence.
+The USAGIX specification defines an open standard for agent governance, enabling safe, auditable, and interoperable AI systems across diverse infrastructure platforms. USAGIX serves as the semantic foundation for agent trust domains, governance policies, and capability-based access control—enabling organizations to deploy sophisticated AI applications with confidence.
 
 ---
 
@@ -14,7 +14,7 @@ To become the industry-standard specification for agent governance, analogous to
 
 ## Scope
 
-The USAGE specification defines:
+The USAGIX specification defines:
 
 1. **Architecture & Trust Domains**
    - Separation between untrusted cognitive agents and trusted governance enforcement planes
@@ -53,7 +53,7 @@ The USAGE specification defines:
 
 ### Out of Scope
 
-The USAGE specification does NOT define:
+The USAGIX specification does NOT define:
 
 - **LLM Model Selection**: Implementations may use any LLM provider or model
 - **Policy Authoring Interfaces**: Individual substrates define their own policy UIs
@@ -65,7 +65,7 @@ The USAGE specification does NOT define:
 
 ## Governance
 
-USAGE is governed by a Technical Steering Committee (TSC) comprising:
+USAGIX is governed by a Technical Steering Committee (TSC) comprising:
 
 - **Maintainers** (2-3): Core specification stewards
 - **Community Representatives** (2-3): Implementers and adopters
@@ -84,7 +84,7 @@ See [GOVERNANCE.md](GOVERNANCE.md) for full governance policy.
 
 ## Standards Alignment
 
-USAGE is designed for alignment with:
+USAGIX is designed for alignment with:
 
 1. **CNCF Graduation Path**
    - Target: Sandbox acceptance (Q2 2025) → Incubating (Q4 2025) → Graduated (Q4 2026)
@@ -117,7 +117,7 @@ USAGE is designed for alignment with:
 
 ## Specification Versioning
 
-USAGE follows semantic versioning with formal backward-compatibility guarantees:
+USAGIX follows semantic versioning with formal backward-compatibility guarantees:
 
 - **MAJOR** (v2.0): Breaking changes; 1-year deprecation window
 - **MINOR** (v1.1): New features; fully backward-compatible
@@ -131,7 +131,7 @@ See [spec/versioning.md](spec/versioning.md) for detailed policy.
 
 ### Adopters & Implementations
 
-Organizations implementing USAGE or using USAGE-compliant substrates are tracked in [ADOPTERS.md](ADOPTERS.md). Featured adopter status requires:
+Organizations implementing USAGIX or using USAGIX-compliant substrates are tracked in [ADOPTERS.md](ADOPTERS.md). Featured adopter status requires:
 
 - ≥80% specification compliance
 - Passing official conformance tests
@@ -160,7 +160,7 @@ All contributions follow the process defined in [CONTRIBUTING.md](CONTRIBUTING.m
 
 ## Security & Compliance
 
-USAGE provides formal security guarantees to implementers:
+USAGIX provides formal security guarantees to implementers:
 
 1. **Mandatory Security Controls**: 6 areas (trust domains, capability-based access control, token budgets, immutable audit logging, output scrubbing, memory isolation)
 2. **Threat Model**: Detailed threat analysis in [spec/security-model.md](spec/security-model.md)
@@ -173,7 +173,7 @@ See [SECURITY.md](SECURITY.md) for vulnerability reporting and security best pra
 
 ## Intellectual Property
 
-By contributing to USAGE, contributors agree to:
+By contributing to USAGIX, contributors agree to:
 
 1. **License Work Under Apache 2.0**: All contributions licensed under Apache 2.0
 2. **Developer Certificate of Origin (DCO)**: All commits signed (`git commit -s`)
@@ -185,7 +185,7 @@ See [LICENSING.md](LICENSING.md) for full IP policy.
 
 ## Roadmap
 
-USAGE follows a multi-year evolution plan:
+USAGIX follows a multi-year evolution plan:
 
 | Phase | Timeline | Focus |
 |-------|----------|-------|
@@ -203,7 +203,7 @@ See [ROADMAP.md](ROADMAP.md) for detailed timeline.
 
 ## Success Criteria
 
-USAGE is successful when:
+USAGIX is successful when:
 
 1. **Community**: 3+ independent substrate implementations across different platforms
 2. **Adoption**: 10+ organizations in early adoption phase by Q3 2025; 50+ by Q4 2026
@@ -215,14 +215,14 @@ USAGE is successful when:
 
 ## Historical Context
 
-USAGE emerged from the need to safely deploy sophisticated AI agents in production environments. Prior to USAGE, implementations lacked a common foundation for:
+USAGIX emerged from the need to safely deploy sophisticated AI agents in production environments. Prior to USAGIX, implementations lacked a common foundation for:
 
 - Trustworthy governance across different infrastructure platforms
 - Interoperable capability-based access control
 - Portable memory models for agent checkpointing
 - Auditable decision-making and compliance reporting
 
-USAGE fills these gaps by defining a substrate-agnostic specification that enables both innovation (substrate implementations can optimize independently) and interoperability (agent code is portable across compliant substrates).
+USAGIX fills these gaps by defining a substrate-agnostic specification that enables both innovation (substrate implementations can optimize independently) and interoperability (agent code is portable across compliant substrates).
 
 ---
 
@@ -232,7 +232,7 @@ USAGE fills these gaps by defining a substrate-agnostic specification that enabl
 - **[GOVERNANCE.md](GOVERNANCE.md)** — TSC composition and decision-making
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — Contribution guidelines and PR workflow
 - **[ROADMAP.md](ROADMAP.md)** — Multi-year specification evolution plan
-- **[ADOPTERS.md](ADOPTERS.md)** — Organizations implementing or adopting USAGE
+- **[ADOPTERS.md](ADOPTERS.md)** — Organizations implementing or adopting USAGIX
 - **[SECURITY.md](SECURITY.md)** — Security guarantees and vulnerability disclosure
 - **[LICENSING.md](LICENSING.md)** — IP policy, DCO, and patent grants
 - **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** — Community standards and conduct
@@ -251,4 +251,4 @@ USAGE fills these gaps by defining a substrate-agnostic specification that enabl
 
 **Charter Approved**: 2025-03-15  
 **Last Updated**: 2025-03-15  
-**Maintained By**: USAGE Specification Stewards
+**Maintained By**: USAGIX Specification Stewards

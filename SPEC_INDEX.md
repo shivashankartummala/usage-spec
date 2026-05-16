@@ -1,10 +1,10 @@
-# USAGE Specification Index
+# USAGIX Specification Index
 
-Complete reference for the Universal Substrate for Agent Governance Enforcement (USAGE) specification suite.
+Complete reference for the Universal Substrate for Agent Governance Enforcement (USAGIX) specification suite.
 
 ## Quick Start
 
-- **New to USAGE?** Start with [README.md](README.md)
+- **New to USAGIX?** Start with [README.md](README.md)
 - **Business pitch?** Read [spec/case-for-agent-os.md](spec/case-for-agent-os.md)
 - **Implementing substrate?** Read [spec/usage-core.md](spec/usage-core.md) then [spec/asi-system-calls.md](spec/asi-system-calls.md)
 - **Compliance requirement?** Check [spec/security-model.md](spec/security-model.md) and [spec/governance-model.md](spec/governance-model.md)
@@ -19,7 +19,7 @@ Complete reference for the Universal Substrate for Agent Governance Enforcement 
 |----------|---------|----------|
 | [spec/usage-core.md](spec/usage-core.md) | Core architecture, layered protocol stack, design principles | Substrate builders, architects |
 | [spec/DIAGRAMS.md](spec/DIAGRAMS.md) | Visual formalization: protocol stack, pod topography, state machine, tool execution, memory tiers | Technical leads, operations |
-| [spec/case-for-agent-os.md](spec/case-for-agent-os.md) | Business case: why traditional OS fail, why USAGE is necessary, market imperatives | Business leaders, decision makers |
+| [spec/case-for-agent-os.md](spec/case-for-agent-os.md) | Business case: why traditional OS fail, why USAGIX is necessary, market imperatives | Business leaders, decision makers |
 | [spec/runtime-state-machine.md](spec/runtime-state-machine.md) | Formal agent lifecycle: states, transitions, semantics, cold-start scheduling | Implementers, QA |
 
 ### API & Protocol Specifications
@@ -27,7 +27,7 @@ Complete reference for the Universal Substrate for Agent Governance Enforcement 
 | Document | Purpose | Audience |
 |----------|---------|----------|
 | [proto/usage/v1/asi.proto](proto/usage/v1/asi.proto) | gRPC service definition, message types, RPC methods | Substrate builders, client library authors |
-| [spec/asi-system-calls.md](spec/asi-system-calls.md) | Detailed RPC reference: UsageSpawn, UsageCallTool, UsageMemPageOut/In, UsageYield | Substrate builders, client developers |
+| [spec/asi-system-calls.md](spec/asi-system-calls.md) | Detailed RPC reference: UsagixSpawn, UsagixCallTool, UsagixMemPageOut/In, UsagixYield | Substrate builders, client developers |
 | [schemas/agent_manifest.schema.json](schemas/agent_manifest.schema.json) | JSON Schema for agent deployment configuration | DevOps, platform teams |
 
 ### Governance & Security
@@ -124,7 +124,7 @@ Complete reference for the Universal Substrate for Agent Governance Enforcement 
 **Agent Lifecycle & State Machine**:
 - [spec/runtime-state-machine.md](spec/runtime-state-machine.md) - Detailed state machine
 - [spec/rfc-001-lifecycle.md](spec/rfc-001-lifecycle.md) - RFC with formal semantics
-- [spec/asi-system-calls.md](spec/asi-system-calls.md) - System calls (UsageSpawn, UsageSetState, UsageYield)
+- [spec/asi-system-calls.md](spec/asi-system-calls.md) - System calls (UsagixSpawn, UsageSetState, UsagixYield)
 
 **Governance & Capabilities**:
 - [spec/governance-model.md](spec/governance-model.md) - Complete governance model
@@ -134,7 +134,7 @@ Complete reference for the Universal Substrate for Agent Governance Enforcement 
 
 **Resource Management & Quotas**:
 - [spec/memory-model.md](spec/memory-model.md) - Memory virtualization (L1/L2/L3)
-- [spec/asi-system-calls.md](spec/asi-system-calls.md) - System calls (UsageMemPageOut, UsageMemPageIn)
+- [spec/asi-system-calls.md](spec/asi-system-calls.md) - System calls (UsagixMemPageOut, UsagixMemPageIn)
 - [spec/governance-model.md](spec/governance-model.md) - Token budgets and quota enforcement
 - [spec/runtime-state-machine.md](spec/runtime-state-machine.md) - Cold-start scheduling pattern
 
@@ -144,7 +144,7 @@ Complete reference for the Universal Substrate for Agent Governance Enforcement 
 - [spec/DIAGRAMS.md](spec/DIAGRAMS.md) - Trust boundary diagrams
 
 **Tool Execution & Mediation**:
-- [spec/asi-system-calls.md](spec/asi-system-calls.md) - UsageCallTool system call
+- [spec/asi-system-calls.md](spec/asi-system-calls.md) - UsagixCallTool system call
 - [spec/governance-model.md](spec/governance-model.md) - Capability validation and constraint enforcement
 - [spec/DIAGRAMS.md](spec/DIAGRAMS.md) - Tool execution sequence diagram
 
@@ -199,12 +199,12 @@ See: [spec/governance-model.md](spec/governance-model.md)
 
 | Method | Purpose | Section |
 |--------|---------|---------|
-| **UsageSpawn** | Create agent session | [ASI Reference §1](spec/asi-system-calls.md#1-usagespawn) |
+| **UsagixSpawn** | Create agent session | [ASI Reference §1](spec/asi-system-calls.md#1-usagespawn) |
 | **UsageSetState** | Transition agent state | [ASI Reference §2](spec/asi-system-calls.md#2-usagesetstate) |
-| **UsageCallTool** | Invoke external tool (mediated) | [ASI Reference §3](spec/asi-system-calls.md#3-usagecalltool) |
-| **UsageMemPageOut** | Evict context to L2/L3 | [ASI Reference §4](spec/asi-system-calls.md#4-usagemempage-out) |
-| **UsageMemPageIn** | Retrieve context from L2/L3 | [ASI Reference §5](spec/asi-system-calls.md#5-usagemempage-in) |
-| **UsageYield** | Yield with checkpoint | [ASI Reference §6](spec/asi-system-calls.md#6-usageyield) |
+| **UsagixCallTool** | Invoke external tool (mediated) | [ASI Reference §3](spec/asi-system-calls.md#3-usagecalltool) |
+| **UsagixMemPageOut** | Evict context to L2/L3 | [ASI Reference §4](spec/asi-system-calls.md#4-usagemempage-out) |
+| **UsagixMemPageIn** | Retrieve context from L2/L3 | [ASI Reference §5](spec/asi-system-calls.md#5-usagemempage-in) |
+| **UsagixYield** | Yield with checkpoint | [ASI Reference §6](spec/asi-system-calls.md#6-usageyield) |
 | **UsageSetCapability** | Grant capability | [ASI Reference §7](spec/asi-system-calls.md#7-usagesetcapability) |
 | **UsageRevokeCapability** | Revoke capability | [ASI Reference §8](spec/asi-system-calls.md#8-usagerevokecapability) |
 
@@ -232,7 +232,7 @@ See [spec/rfc-001-lifecycle.md](spec/rfc-001-lifecycle.md) for v2 compliance che
 | Term | Definition | See |
 |------|-----------|-----|
 | **Agent** | Autonomous system making decisions via LLM inference | [spec/usage-core.md §1](spec/usage-core.md) |
-| **Substrate** | Runtime environment implementing USAGE interface | [spec/usage-core.md §5](spec/usage-core.md) |
+| **Substrate** | Runtime environment implementing USAGIX interface | [spec/usage-core.md §5](spec/usage-core.md) |
 | **Capability Token** | Cryptographically signed authorization grant | [spec/governance-model.md §2](spec/governance-model.md) |
 | **Checkpoint** | Serialized agent state (header + opaque payload) | [spec/memory-model.md §1.2](spec/memory-model.md) |
 | **Token Budget** | Hard limit on LLM tokens consumed per agent | [spec/governance-model.md §4.1](spec/governance-model.md) |
@@ -259,7 +259,7 @@ See [spec/rfc-001-lifecycle.md](spec/rfc-001-lifecycle.md) for v2 compliance che
 ### Diagrams & Visual References
 
 - [spec/DIAGRAMS.md](spec/DIAGRAMS.md) - Comprehensive architectural diagrams (5 diagrams total)
-  1. USAGE Protocol Stack (Layer 1-4 abstraction)
+  1. USAGIX Protocol Stack (Layer 1-4 abstraction)
   2. Myelin-AX Pod Topography (agent-brain + myelin-proxy)
   3. State Machine (5 states with transitions)
   4. Tool Execution Sequence (9-step flow with governance)
@@ -280,7 +280,7 @@ See [spec/rfc-001-lifecycle.md](spec/rfc-001-lifecycle.md) for v2 compliance che
 
 ## Contributing
 
-To propose changes to USAGE specifications:
+To propose changes to USAGIX specifications:
 
 1. File an issue describing the change
 2. If RFC-level, propose RFC document in [spec/](spec/)
@@ -294,9 +294,9 @@ To propose changes to USAGE specifications:
 
 ## License
 
-All USAGE specifications and documentation are licensed under the [LICENSE](../LICENSE) in the root repository.
+All USAGIX specifications and documentation are licensed under the [LICENSE](../LICENSE) in the root repository.
 
 ---
 
 **Last Updated**: 2025-03-15
-**Maintainer**: USAGE Platform - Architecture Team
+**Maintainer**: USAGIX Platform - Architecture Team

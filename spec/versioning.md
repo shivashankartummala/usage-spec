@@ -1,14 +1,14 @@
-# USAGE Specification Versioning Policy
+# USAGIX Specification Versioning Policy
 
 ## Overview
 
-This document defines semantic versioning (SemVer) policies for the USAGE specification suite, 
+This document defines semantic versioning (SemVer) policies for the USAGIX specification suite, 
 wire protocols, and policy bundles. The goal is to provide clear, enforceable compatibility 
 guarantees to substrate implementers and policy authors.
 
 ## Specification Version
 
-The USAGE specification follows **Semantic Versioning 2.0.0** (semver.org).
+The USAGIX specification follows **Semantic Versioning 2.0.0** (semver.org).
 
 **Format**: `MAJOR.MINOR.PATCH` (e.g., `1.0.0`, `1.1.0`, `1.2.3`)
 
@@ -32,7 +32,7 @@ The USAGE specification follows **Semantic Versioning 2.0.0** (semver.org).
 - New RPC methods added only with new minor versions
 - Field semantics never change for existing field IDs
 
-**Rule**: If you implement against `usage.v1.asi.proto`, all future v1.x releases will remain wire-compatible.
+**Rule**: If you implement against `usagix.v1.asi.proto`, all future v1.x releases will remain wire-compatible.
 
 **Breaking Changes Policy**: Breaking changes reserved for v2.0.0 only (and announced 1 year in advance).
 
@@ -54,7 +54,7 @@ For Kubernetes substrates, CRDs MUST follow Kubernetes API versioning convention
 
 ## OTel Attributes (Semantic Convention Stability)
 
-USAGE semantic attributes align with OpenTelemetry semantic convention stability model:
+USAGIX semantic attributes align with OpenTelemetry semantic convention stability model:
 
 | Stability Track | Compatibility | Rules |
 |-----------------|---|-------|
@@ -140,7 +140,7 @@ Every proto file MUST include version in package declaration:
 
 ```protobuf
 syntax = "proto3";
-package usage.v1;  // ← Reflects ASI v1 (stable)
+package usagix.v1;  // ← Reflects ASI v1 (stable)
 ```
 
 ## Testing and Validation

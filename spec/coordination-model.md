@@ -1,12 +1,12 @@
 # Multi-Agent Coordination Model
 
 ## Process Tree
-USAGE models agent orchestration as a supervision tree.
+USAGIX models agent orchestration as a supervision tree.
 - Parent sessions own child sessions.
 - Ownership includes budget partitioning and termination semantics.
 
 ## Spawn Semantics
-- Parent MAY allocate sub-budget to child at `UsageSpawn`.
+- Parent MAY allocate sub-budget to child at `UsagixSpawn`.
 - Child MUST inherit policy floor from parent; narrowing is allowed, widening is denied.
 
 ## Failure Semantics

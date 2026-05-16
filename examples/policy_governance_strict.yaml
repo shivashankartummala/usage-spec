@@ -17,7 +17,7 @@
 # Author: USAGE Platform - Compliance Team
 # Version: 1.0.0
 
-apiVersion: usage.io/v1
+apiVersion: mantle.sh/v1alpha1
 kind: GovernancePolicy
 metadata:
   name: strict-governance-hipaa

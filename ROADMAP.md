@@ -1,8 +1,8 @@
-# USAGE Specification Roadmap
+# USAGIX Specification Roadmap
 
 ## Vision
 
-USAGE is on a path to become an industry-standard specification for agent governance, analogous to POSIX for operating systems or ONNX for machine learning. This roadmap outlines the evolution of the specification and reference implementations.
+USAGIX is on a path to become an industry-standard specification for agent governance, analogous to POSIX for operating systems or ONNX for machine learning. This roadmap outlines the evolution of the specification and reference implementations.
 
 ## Timeline
 
@@ -162,7 +162,7 @@ Q4 2026: Graduated Stage (5+ implementations, 50+ adopters, formal governance)
 
 ## How to Contribute
 
-Interested in implementing USAGE or contributing to the specification?
+Interested in implementing USAGIX or contributing to the specification?
 
 1. **Read**: [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines
 2. **Review**: [GOVERNANCE.md](GOVERNANCE.md) for decision-making process

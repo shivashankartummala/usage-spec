@@ -1,9 +1,9 @@
-# USAGE Specification Repository - Generation Summary
+# USAGIX Specification Repository - Generation Summary
 
 **Generated:** 2026-05-15  
 **Status:** ✅ Complete and Production-Ready
 
-This document summarizes the complete boilerplate, documentation, protocol files, and manifest schemas generated for the USAGE (Universal Substrate for Agent Governance Enforcement) specification repository.
+This document summarizes the complete boilerplate, documentation, protocol files, and manifest schemas generated for the USAGIX (Universal Substrate for Agent Governance Enforcement) specification repository.
 
 ---
 
@@ -12,7 +12,7 @@ This document summarizes the complete boilerplate, documentation, protocol files
 ### Core Documentation
 
 #### 1. **README.md** ✅
-- Comprehensive introduction to USAGE as the "AI POSIX"
+- Comprehensive introduction to USAGIX as the "AI POSIX"
 - 4-Layer Protocol Stack explanation with clear responsibilities
 - POSIX analogy drawing parallels between kernel/application and substrate/agent boundaries
 - Repository layout map with directory tree visualization
@@ -39,31 +39,31 @@ Production-grade Protocol Buffer v3 specification defining the Agent Substrate I
 - `MemoryTier`: TIER_L2_VECTOR_CACHE, TIER_L3_COLD_STORAGE
 - `AgentState`: PENDING, ACTIVE, THINKING, PAUSED, TERMINATED
 
-**gRPC Service: UsageSubstrateCore**
+**gRPC Service: UsagixSubstrateCore**
 
 Five RPC Methods:
 
-1. **UsageSpawn(SpawnRequest) → SpawnResponse**
+1. **UsagixSpawn(SpawnRequest) → SpawnResponse**
    - Initializes new agent process
    - Specifies parent PID, capabilities, environment, token quota, sandbox level
    - Returns session ID, initial state, metadata
 
-2. **UsageYield(YieldRequest) → YieldResponse**
+2. **UsagixYield(YieldRequest) → YieldResponse**
    - Serializes agent state and yields control
    - Preserves context state blob, token consumption, current state
    - Returns checkpoint ID for future resumption
 
-3. **UsageSignal(SignalRequest) → SignalResponse**
+3. **UsagixSignal(SignalRequest) → SignalResponse**
    - Delivers control signals to agent
    - Supports terminate, pause, interrupt
    - Returns acknowledgment and new state
 
-4. **UsageMemPageOut(PageOutRequest) → PageOutResponse**
+4. **UsagixMemPageOut(PageOutRequest) → PageOutResponse**
    - Triggers memory tier transitions
    - Moves context from L1 to L2 (warm cache) or L3 (cold storage)
    - Returns storage address reference and tier acknowledgment
 
-5. **UsageCallTool(ToolRequest) → ToolResponse**
+5. **UsagixCallTool(ToolRequest) → ToolResponse**
    - Invokes external tools within governance boundary
    - Gated by agent's capability set
    - Returns execution success flag, JSON result payload, timing, error message
@@ -82,7 +82,7 @@ All messages fully documented with field-level comments explaining semantics and
 ### Manifest Schema
 
 #### 3. **schemas/agent_manifest.schema.json** ✅
-Production-grade JSON Schema (Draft 7) for USAGE-compliant agent deployment manifests.
+Production-grade JSON Schema (Draft 7) for USAGIX-compliant agent deployment manifests.
 
 **Root Properties:**
 - `apiVersion` (required, enum: ["usage.io/v1"])
@@ -154,7 +154,7 @@ Comprehensive architectural RFC defining the agent process lifecycle state machi
    - Agent actively reasoning/inferring
    - Consuming tokens, invoking tools, managing memory
    - Token budget enforced; quota exceeded → TERMINATED
-   - → PAUSED (UsageYield) or → TERMINATED (signal/timeout)
+   - → PAUSED (UsagixYield) or → TERMINATED (signal/timeout)
 
 4. **PAUSED**
    - State serialized and yielded to substrate
@@ -170,7 +170,7 @@ Comprehensive architectural RFC defining the agent process lifecycle state machi
 - Illegal transitions explicitly forbidden
 - Transition rules enforce state machine invariants
 
-**Memory Serialization During UsageYield:**
+**Memory Serialization During UsagixYield:**
 - Context serialization (inference history, artifacts, metadata)
 - Substrate acknowledgment with checkpoint ID
 - Token budget preservation across resumption
@@ -377,7 +377,7 @@ markdownlint README.md spec/rfc-001-lifecycle.md
 
 ## Contact & Support
 
-For questions about the USAGE specification, refer to the README.md contributing guidelines or contact the USAGE Specification Committee.
+For questions about the USAGIX specification, refer to the README.md contributing guidelines or contact the USAGIX Specification Committee.
 
 Generated: 2026-05-15  
 Version: 1.0.0-DRAFT

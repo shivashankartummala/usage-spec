@@ -1,16 +1,16 @@
-# USAGE Core Architecture Specification
+# USAGIX Core Architecture Specification
 
 ## 1. Scope
-USAGE standardizes the contract between autonomous cognitive processes and execution substrates. It is substrate-agnostic and does not prescribe model providers, prompting frameworks, or orchestration SDKs.
+USAGIX standardizes the contract between autonomous cognitive processes and execution substrates. It is substrate-agnostic and does not prescribe model providers, prompting frameworks, or orchestration SDKs.
 
 ## 2. Definitive Scope Trigger (Operational Binary)
-USAGE classification is binary and programmatic. Behavioral, philosophical, or framework-based definitions of agency are out of scope for classification decisions.
+USAGIX classification is binary and programmatic. Behavioral, philosophical, or framework-based definitions of agency are out of scope for classification decisions.
 
-A workload is unconditionally classified as an AI Agent under USAGE when both conditions are true:
+A workload is unconditionally classified as an AI Agent under USAGIX when both conditions are true:
 - Inference Core Invocation: the workload invokes one or more foundation model or LLM calls to determine state or control flow.
 - Peripheral Access Capabilities: the workload can invoke external tools, databases, web APIs, or native host system calls.
 
-Any script, binary, service, job, or active execution thread meeting both conditions is in-scope for USAGE runtime enforcement.
+Any script, binary, service, job, or active execution thread meeting both conditions is in-scope for USAGIX runtime enforcement.
 
 ## 3. Absolute Boundary Condition
 No exception exists for code size, framework usage, or runtime longevity.
@@ -19,7 +19,7 @@ Rule of inclusion:
 - A minimal script that calls an LLM endpoint and executes shell, filesystem, or API actions is semantically equivalent (for governance scope) to a multi-agent orchestration tree.
 
 Rule of boundary enforcement:
-- Upon meeting the scope trigger, the workload MUST be enclosed by the USAGE runtime boundary.
+- Upon meeting the scope trigger, the workload MUST be enclosed by the USAGIX runtime boundary.
 - The workload MUST relinquish direct external network/filesystem side-effect pathways except substrate-mediated pathways.
 - The workload MUST authenticate with a distinct cryptographically verifiable workload identity.
 - The workload MUST route external actions through the substrate tool-proxy path.
@@ -45,10 +45,10 @@ All normative statements in this specification are binding on compliant substrat
 ## 6. Trust Boundaries
 - The cognitive container is untrusted by default.
 - Governance and policy enforcement MUST execute outside the cognitive trust boundary.
-- External side effects MUST be mediated through USAGE system calls.
+- External side effects MUST be mediated through USAGIX system calls.
 
 ## 7. Portability Contract
-A USAGE-compliant cognitive workload MUST execute against any substrate implementing:
+A USAGIX-compliant cognitive workload MUST execute against any substrate implementing:
 - ASI gRPC service behavior
 - Lifecycle semantics
 - Error model and result determinism constraints
@@ -64,7 +64,7 @@ A USAGE-compliant cognitive workload MUST execute against any substrate implemen
 
 ## 10. Protocol Stack Architecture
 
-USAGE defines a 4-layer protocol stack with clear responsibility boundaries:
+USAGIX defines a 4-layer protocol stack with clear responsibility boundaries:
 
 ```
 ┌────────────────────────────────────────┐
@@ -94,13 +94,13 @@ USAGE defines a 4-layer protocol stack with clear responsibility boundaries:
 
 **Layer 2 (Runtime & Execution)**: Session lifecycle management (PENDING→ACTIVE→THINKING→PAUSED→TERMINATED), checkpoint/restore mechanics, virtual memory (L1/L2/L3) management, signal handling.
 
-**Layer 1 (SAL - Substrate Adaptation Layer)**: Actual hardware/cloud primitives—Kubernetes pods, container isolation, persistent storage, network access, sidecar networking. Maps USAGE abstractions to concrete infrastructure.
+**Layer 1 (SAL - Substrate Adaptation Layer)**: Actual hardware/cloud primitives—Kubernetes pods, container isolation, persistent storage, network access, sidecar networking. Maps USAGIX abstractions to concrete infrastructure.
 
 ## 11. Security Model Overview
 
 ### 11.1 Defense Layers
 
-USAGE security operates via **multiple defense layers**, each enforcing constraints at different points:
+USAGIX security operates via **multiple defense layers**, each enforcing constraints at different points:
 
 **Layer A: Identity & Authentication**
 - Agent authenticates with unique cryptographic identity (not inherited from container/process)
@@ -125,7 +125,7 @@ USAGE security operates via **multiple defense layers**, each enforcing constrai
 
 ### 11.2 Threat Model
 
-USAGE assumes the following threats:
+USAGIX assumes the following threats:
 
 | Threat | Agent Can... | Substrate Prevents |
 |--------|-------------|-------------------|
@@ -138,7 +138,7 @@ USAGE assumes the following threats:
 | **Lateral Movement** | Use one tool to access another's resources | Tool authorization checked per-tool; no transitive trust |
 | **Time-Decay Attack** | Assume policies unchanged since checkpoint | Policies re-validated on resume; governance compliance checked |
 
-USAGE **does not defend against**:
+USAGIX **does not defend against**:
 - Inference engine vulnerabilities (e.g., backdoored model weights)
 - Tool implementation bugs (substrate assumes tools are correctly written)
 - Physical infrastructure compromise (substrate assumes substrate code is trustworthy)
@@ -221,7 +221,7 @@ and Governance Enforcement Plane run in separate trust domains (e.g., separate c
              ↓
 ┌─────────────────────────────────────────┐
 │  Governance Enforcement Plane (Trusted) │
-│  - USAGE ASI implementation             │
+│  - USAGIX ASI implementation             │
 │  ✓ Capability validation                │
 │  ✓ Token accounting                     │
 │  ✓ Audit logging                        │
@@ -236,7 +236,7 @@ and Governance Enforcement Plane run in separate trust domains (e.g., separate c
 ```
 
 Cognitive Container cannot directly reach external network (no egress). All external access routes through 
-Governance Enforcement Plane, which enforces USAGE constraints.
+Governance Enforcement Plane, which enforces USAGIX constraints.
 
 **Implementation Note**: See `reference/myelin-ax/ARCHITECTURE.md` for a concrete Kubernetes implementation 
 using sidecar containers.
@@ -286,7 +286,7 @@ Implement bidirectional paging (PageOut and PageIn):
 
 ## 15. Observability and Compliance
 
-USAGE requires the following observability:
+USAGIX requires the following observability:
 
 ### 15.1 Mandatory Logs
 
@@ -308,7 +308,7 @@ All logs flow to an **immutable audit sink** (e.g., CloudTrail, Datadog, syslog 
 
 ## 16. Error Model
 
-USAGE defines standardized error responses:
+USAGIX defines standardized error responses:
 
 | Code | Meaning | Agent Recourse |
 |------|---------|---|

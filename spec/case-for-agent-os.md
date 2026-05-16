@@ -13,7 +13,7 @@ Modern operating systems (Unix/POSIX, Linux, Windows) were designed to manage **
 
 Attempting to run modern AI agents on traditional OS primitives is like attempting to run a GPU-aware HPC workload on a 1990s Unix scheduler. The abstraction leaks catastrophically.
 
-**USAGE (Universal Substrate for Agent Governance Enforcement) is the missing standard**—a POSIX-equivalent for the agent-substrate boundary.
+**USAGIX (Universal Substrate for Agent Governance Enforcement) is the missing standard**—a POSIX-equivalent for the agent-substrate boundary.
 
 ---
 
@@ -100,7 +100,7 @@ Human labor models include accountability primitives (disciplinary, legal, contr
 
 When an unmanaged agent causes data disclosure, policy violation, or financial runaway behavior, **enterprise liability is immediate and complete**—and enterprise has no defense of "we did enforce safeguards" because no substrate-level safeguards exist.
 
-USAGE resolves this by moving accountability from the cognitive layer (LLM behavior, prompting, fine-tuning) into the substrate layer (kernel-mediated governance, budget enforcement, attestation).
+USAGIX resolves this by moving accountability from the cognitive layer (LLM behavior, prompting, fine-tuning) into the substrate layer (kernel-mediated governance, budget enforcement, attestation).
 
 ```text
 Traditional: [Agent] → (no governance) → [Infrastructure]
@@ -108,7 +108,7 @@ Traditional: [Agent] → (no governance) → [Infrastructure]
             → Data breach, cost overrun, policy violation
             → Enterprise liable, impossible to prove safeguards were enforced
 
-USAGE:      [Agent] → [USAGE Substrate] → [Infrastructure]
+USAGIX:      [Agent] → [USAGIX Substrate] → [Infrastructure]
                      (auditable liability boundary)
             ↓ agent misbehaves ↓
             → Substrate enforced budget caps
@@ -182,11 +182,11 @@ No audit trail of what happened
 
 ---
 
-## Part 2: USAGE as the Solution
+## Part 2: USAGIX as the Solution
 
 ### 2.1 Cognitive Metrics as First-Class Resources
 
-USAGE makes cognitive metrics **mandatory, measurable, and enforceable**:
+USAGIX makes cognitive metrics **mandatory, measurable, and enforceable**:
 
 ```protobuf
 message UsageSpec {
@@ -209,7 +209,7 @@ Every agent has:
 
 ### 2.2 Governance, Citizenship, and Liability
 
-USAGE defines an explicit governance control plane orthogonal to execution:
+USAGIX defines an explicit governance control plane orthogonal to execution:
 
 ```protobuf
 rpc UsageSetCapability(SetCapabilityRequest) returns (SetCapabilityResponse);
@@ -235,7 +235,7 @@ This is **not possible** in traditional OS designs because:
 - Attestation is application-specific (cannot be kernel-mediated)
 - No centralized capability ledger visible to all policy components
 
-USAGE makes governance:
+USAGIX makes governance:
 - **Centralized**: one source of truth for agent capabilities
 - **Runtime-mutable**: policies change without checkpoint restore
 - **Auditable**: every governance decision logged and attested
@@ -244,7 +244,7 @@ USAGE makes governance:
 
 ### 2.3 Checkpoint Portability and Governance Continuity
 
-USAGE separates **standardized metadata** from **opaque payload**:
+USAGIX separates **standardized metadata** from **opaque payload**:
 
 ```protobuf
 message CheckpointHeaderAndPayload {
@@ -281,7 +281,7 @@ This is **entirely absent** in traditional OS designs:
 
 ### 2.4 Lifecycle Primitives for Enterprise Patterns
 
-USAGE authorizes transitions traditional OS forbids:
+USAGIX authorizes transitions traditional OS forbids:
 
 ```
 State Machine:
@@ -313,7 +313,7 @@ Unix cannot express this: a process is either running or not. Pause requires SIG
 
 ---
 
-## Part 3: Market Imperatives Driving USAGE
+## Part 3: Market Imperatives Driving USAGIX
 
 ### 3.1 Regulatory Compliance (SOC2, HIPAA, PCI-DSS)
 
@@ -324,13 +324,13 @@ Modern enterprises cannot run agents without:
 - **Data minimization**: agents can only see/access what they need
 - **Liability attestation**: cryptographic proof that safeguards were in place and enforced
 
-USAGE makes this **native**. Traditional stacks require bolting on:
+USAGIX makes this **native**. Traditional stacks require bolting on:
 - Logging middleware (loses events, adds latency, no cryptographic proof)
 - sidecar proxies (performance tax, complex deployment, not portable)
 - Manual governance (prone to gaps, difficult to audit)
 - Custom token tracking (non-standard, breaks portability)
 
-**Cost impact**: Compliance-ready deployment 3-4x cheaper with USAGE than retrofitting legacy infrastructure. Legal defense is actually defensible with USAGE (auditable proof) vs. "trust me" with traditional stacks.
+**Cost impact**: Compliance-ready deployment 3-4x cheaper with USAGIX than retrofitting legacy infrastructure. Legal defense is actually defensible with USAGIX (auditable proof) vs. "trust me" with traditional stacks.
 
 ### 3.2 Token Economics and Cost Control
 
@@ -342,7 +342,7 @@ An uncontrolled agent can burn $10K+/month in tokens if:
 - Context rehydration unnecessarily copies data
 - Prompt degradation causes retry loops
 
-USAGE enforces **hard limits**:
+USAGIX enforces **hard limits**:
 - Token budget enforced at substrate level
 - Tool depth bounded to prevent explosion
 - Memory tier management prevents needless rehydration
@@ -364,7 +364,7 @@ This **does not work** for agents because:
 - One agent's tool invocation should not slow another's inference
 - Compliance requirements differ by agent origin
 
-USAGE makes isolation explicit:
+USAGIX makes isolation explicit:
 - Each agent has isolated capability set
 - Token accounting is per-agent, not per-process
 - Governance policies enforced per-agent at substrate level
@@ -380,7 +380,7 @@ Traditional OS helped here (Linux runs on 1000s of hardware platforms), but:
 - Governance policies are vendor-specific (YAML for Myelin-AX, JSON for Antml, etc.)
 - Token accounting differs by vendor
 
-USAGE provides:
+USAGIX provides:
 - Standardized checkpoint header (any substrate can read format, version, governance state)
 - Vendor-specific extensions (opaque_payload allows optimizations without breaking portability)
 - Unified governance model (policies written once, enforced everywhere)
@@ -390,14 +390,14 @@ USAGE provides:
 
 ---
 
-## Part 4: USAGE Adoption Phases
+## Part 4: USAGIX Adoption Phases
 
 ### 4.1 Phase 1: Early Adopters (Q2-Q4 2026)
 
 **Target**: Enterprises with regulatory mandates, high token spend, SOC2/HIPAA requirements
 
 **What they get**:
-- Substrate vendors (Myelin-AX, Antml) implement USAGE interface
+- Substrate vendors (Myelin-AX, Antml) implement USAGIX interface
 - Agents deployed with hard token budgets, governance policies, audit trails, cold-start scheduling
 - Ability to prove compliance via cryptographic attestation
 
@@ -408,34 +408,34 @@ USAGE provides:
 **Target**: Large SaaS platforms, enterprise platforms (multi-agent per deployment)
 
 **What they get**:
-- USAGE becomes part of ML platform standards (like Kubernetes for containers)
-- Cloud providers offer USAGE-aware services
-- Tool vendors certify against USAGE (like "Linux certified")
+- USAGIX becomes part of ML platform standards (like Kubernetes for containers)
+- Cloud providers offer USAGIX-aware services
+- Tool vendors certify against USAGIX (like "Linux certified")
 - Multi-substrate deployments become standard for availability and cost optimization
 
-**Outcome**: USAGE becomes de facto standard for enterprise AI operations
+**Outcome**: USAGIX becomes de facto standard for enterprise AI operations
 
 ### 4.3 Phase 3: Ecosystem Maturity (2027+)
 
 **Target**: Broader industry, cost-sensitive deployments
 
 **What they get**:
-- USAGE drivers for all major substrates (open-source and proprietary)
+- USAGIX drivers for all major substrates (open-source and proprietary)
 - Governance-as-code frameworks (Terraform-like for agent policies)
 - Turnkey compliance packages (SOC2, HIPAA, PCI-DSS templates)
 - Standard tool certification (tools declare capability requirements, substrates validate)
 
-**Outcome**: USAGE-governed agents become standard practice, like containerization today
+**Outcome**: USAGIX-governed agents become standard practice, like containerization today
 
 ---
 
 ## Conclusion
 
-**USAGE is not an optimization. It is a necessity.**
+**USAGIX is not an optimization. It is a necessity.**
 
 Traditional operating systems manage **physical resources** (CPU, memory, I/O). They are fundamentally unsuited for **cognitive resources** (tokens, attention, tool depth) and **governance citizenship** (capability grants, policy enforcement, liability attestation).
 
-Enterprises attempting to run production agents without USAGE face:
+Enterprises attempting to run production agents without USAGIX face:
 1. **Runaway token costs** (no budget enforcement) — unbounded financial exposure
 2. **Compliance gaps** (no governance visibility) — regulatory violation, liability
 3. **Multi-tenant disasters** (no isolation guarantees) — data leakage, noisy-neighbor problems
@@ -443,7 +443,7 @@ Enterprises attempting to run production agents without USAGE face:
 5. **Liability vacuum** (no attestation) — when things go wrong, no proof of safeguards
 6. **Operational complexity** (no lifecycle primitives) — manual workarounds, fragile systems
 
-USAGE solves all six by introducing a **standard interface** for agent-substrate interaction, making:
+USAGIX solves all six by introducing a **standard interface** for agent-substrate interaction, making:
 - Cognitive resources first-class and enforceable
 - Governance citizenship mandatory with attestation
 - Checkpoints portable across substrates
@@ -453,6 +453,6 @@ USAGE solves all six by introducing a **standard interface** for agent-substrate
 - **Regulatory**: SOC2, HIPAA, PCI-DSS require governance that legacy stacks cannot provide
 - **Economic**: $10M+ enterprise AI spend requires cost control; token budgets are non-negotiable
 - **Technical**: Multi-tenant, multi-substrate deployments require standardization
-- **Competitive**: First-mover advantage in USAGE adoption will own the agent infrastructure market
+- **Competitive**: First-mover advantage in USAGIX adoption will own the agent infrastructure market
 
-**USAGE is the POSIX standard for AI agents.** The only question is adoption velocity.
+**USAGIX is the POSIX standard for AI agents.** The only question is adoption velocity.

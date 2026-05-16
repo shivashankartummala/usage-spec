@@ -1,7 +1,7 @@
-# OpenTelemetry Semantic Conventions Proposal (USAGE)
+# OpenTelemetry Semantic Conventions Proposal (USAGIX)
 
 ## Scope
-Defines telemetry attributes and events for USAGE substrates.
+Defines telemetry attributes and events for USAGIX substrates.
 
 ## Resource Attributes
 - `usage.substrate.name`

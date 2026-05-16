@@ -11,7 +11,7 @@ in all capitals, as shown here.
 
 All normative statements in this specification are binding on compliant substrates and implementations.
 
-## 1. UsageSpawn — Create an Agent Session
+## 1. UsagixSpawn — Create an Agent Session
 
 ### Purpose
 Creates a new agent session instance with initial quota, capabilities, and lifecycle state. The new session begins in `PENDING` state and must transition to `ACTIVE` before execution can begin.
@@ -19,7 +19,7 @@ Creates a new agent session instance with initial quota, capabilities, and lifec
 ### Protobuf Definition
 ```protobuf
 service UsageSubstrate {
-  rpc UsageSpawn(SpawnRequest) returns (SpawnResponse);
+  rpc UsagixSpawn(SpawnRequest) returns (SpawnResponse);
 }
 
 message SpawnRequest {
@@ -70,7 +70,7 @@ message SpawnResponse {
 ### Example: Spawning an Agent with Cold-Start Scheduling
 
 ```python
-response = substrate.UsageSpawn(SpawnRequest(
+response = substrate.UsagixSpawn(SpawnRequest(
   session_name="batch_processor_001",
   usage_spec=UsageSpec(
     max_tokens_quota=500_000,
@@ -169,7 +169,7 @@ response = substrate.UsageSetState(SetStateRequest(
 
 ---
 
-## 3. UsageCallTool — Mediated Tool Invocation
+## 3. UsagixCallTool — Mediated Tool Invocation
 
 ### Purpose
 Agent requests execution of an external tool (API call, database query, system command, etc.). Substrate validates capability, enforces constraints, executes tool, scrubs output, and returns result.
@@ -244,7 +244,7 @@ message ToolResponse {
 
 ```python
 # Agent requests to query user database
-response = substrate.UsageCallTool(ToolRequest(
+response = substrate.UsagixCallTool(ToolRequest(
   session_id="ag-uuid-xxx",
   tool_id="database.query",
   operation="SELECT",
@@ -272,7 +272,7 @@ else:
 
 ---
 
-## 4. UsageMemPageOut — Evict Context to Lower Tier
+## 4. UsagixMemPageOut — Evict Context to Lower Tier
 
 ### Purpose
 Agent requests demotion of context pages from L1 (active context) to L2/L3 (warm/cold storage). Used when context grows large and agent needs to free space. Substrate maintains references for later retrieval (PageIn).
@@ -330,7 +330,7 @@ message PageOutResponse {
 
 ```python
 # Agent's context is getting full, evict old conversation history to L2
-response = substrate.UsageMemPageOut(PageOutRequest(
+response = substrate.UsagixMemPageOut(PageOutRequest(
   session_id="ag-uuid-xxx",
   pages_to_evict=[
     PageReference(
@@ -344,12 +344,12 @@ response = substrate.UsageMemPageOut(PageOutRequest(
 ))
 
 # Returns page_references=["redis://cache.internal:6379/ag-xxx/page-1"]
-# Agent can now reference this later via UsageMemPageIn
+# Agent can now reference this later via UsagixMemPageIn
 ```
 
 ---
 
-## 5. UsageMemPageIn — Retrieve Context from Lower Tier
+## 5. UsagixMemPageIn — Retrieve Context from Lower Tier
 
 ### Purpose
 Agent requests retrieval of a previously evicted context page from L2/L3 back into L1. Substrate validates governance compliance before rehydrating.
@@ -397,7 +397,7 @@ When retrieving from cold storage, substrate MUST:
 
 ```python
 # Agent retrieves previously evicted context
-response = substrate.UsageMemPageIn(PageInRequest(
+response = substrate.UsagixMemPageIn(PageInRequest(
   session_id="ag-uuid-xxx",
   page_reference="redis://cache.internal:6379/ag-xxx/page-1",
   decryption_required=False
@@ -420,7 +420,7 @@ elif response.policy_revalidation_status == "DEGRADED":
 
 ---
 
-## 6. UsageYield — Cooperative Pause with Checkpoint
+## 6. UsagixYield — Cooperative Pause with Checkpoint
 
 ### Purpose
 Agent explicitly yields control and requests pause with checkpoint. Used for long-running operations that need to suspend and resume later.
@@ -468,7 +468,7 @@ message YieldResponse {
 
 ```python
 # Agent has made progress on long task, yields before budget exhausted
-response = substrate.UsageYield(YieldRequest(
+response = substrate.UsagixYield(YieldRequest(
   session_id="ag-uuid-xxx",
   checkpoint_hint="Completed first phase of analysis, pausing for 1 hour",
   checkpoint_metadata={

@@ -1,7 +1,8 @@
-# USAGE Agent Manifest Example: Basic Research Assistant
+# Mantle Agent Manifest Example: Basic Research Assistant (USAGIX Protocol)
 # This is a minimal but fully functional agent manifest for a research-focused assistant.
+# Implements the USAGIX protocol standard via the Mantle ecosystem.
 
-apiVersion: usage.io/v1
+apiVersion: mantle.sh/v1alpha1
 kind: SovereignAgent
 
 metadata:
@@ -31,7 +32,7 @@ spec:
   memory:
     l1ContextWindow: 100000                              # 100K token context window
     l2CacheProvider: "redis://cache.internal:6379"     # Warm cache backend
-    l3ColdStorageProvider: "s3://usage-buckets/research-agent-sessions"  # Cold storage
+    l3ColdStorageProvider: "s3://mantle-buckets/research-agent-sessions"  # Cold storage
     l2CachePolicy: lru                                  # Least-recently-used eviction
 
   identity:

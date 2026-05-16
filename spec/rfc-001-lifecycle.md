@@ -4,25 +4,25 @@
 **Title:** Process Lifecycle and State Machine  
 **Status:** APPROVED (Updated 2026-05-16 for Enterprise Scheduling)  
 **Last Updated:** 2026-05-16  
-**Author(s):** USAGE Specification Authors  
+**Author(s):** USAGIX Specification Authors  
 
 ---
 
 ## Executive Summary
 
-This RFC formally specifies the state machine that governs the lifecycle of a USAGE-compliant agent process. The specification defines five fundamental engine phases (Pending, Active, Thinking, Paused, Terminated), the legal state transitions between them, the semantic guarantees and invariants at each state, and the mechanisms by which the substrate enforces state machine properties.
+This RFC formally specifies the state machine that governs the lifecycle of a USAGIX-compliant agent process. The specification defines five fundamental engine phases (Pending, Active, Thinking, Paused, Terminated), the legal state transitions between them, the semantic guarantees and invariants at each state, and the mechanisms by which the substrate enforces state machine properties.
 
 **v2 Update:** Added support for proactive cold-start scheduling patterns required by high-density enterprise container environments. Allows substrate-driven Active → Paused transitions to enable advanced orchestration without forcing agents through cognitive inference first.
 
-This specification ensures that all USAGE-compliant substrates maintain consistent, reproducible, and formally verifiable agent process semantics.
+This specification ensures that all USAGIX-compliant substrates maintain consistent, reproducible, and formally verifiable agent process semantics.
 
 ---
 
 ## Terminology
 
-- **Agent Process**: An autonomous reasoning engine instantiated by `UsageSpawn()`. The agent executes within the bounds defined by the USAGE ASI.
+- **Agent Process**: An autonomous reasoning engine instantiated by `UsagixSpawn()`. The agent executes within the bounds defined by the USAGIX ASI.
 - **Substrate**: The execution environment hosting the agent process. The substrate enforces state machine invariants and manages transitions.
-- **Session**: A unique execution context for an agent process, identified by a `session_id` returned from `UsageSpawn()`.
+- **Session**: A unique execution context for an agent process, identified by a `session_id` returned from `UsagixSpawn()`.
 - **State Transition**: A change in the agent's state. Only legal transitions (defined in this RFC) are permitted.
 - **Context State**: The full serializable state of the agent's reasoning, including inference history, memory artifacts, and execution metadata.
 - **Token Budget**: The maximum number of tokens the agent is allowed to consume, specified in `SpawnRequest.max_tokens_quota`.
@@ -34,11 +34,11 @@ This specification ensures that all USAGE-compliant substrates maintain consiste
 
 ### The Five States
 
-The USAGE agent lifecycle is governed by a finite state machine with exactly five states:
+The USAGIX agent lifecycle is governed by a finite state machine with exactly five states:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                     USAGE Agent State Machine (v2)                   │
+│                     USAGIX Agent State Machine (v2)                   │
 └─────────────────────────────────────────────────────────────────────┘
 
                          ┌─────────────┐
@@ -76,12 +76,12 @@ The USAGE agent lifecycle is governed by a finite state machine with exactly fiv
 
 #### State 1: PENDING
 
-**Entry Condition:** `UsageSpawn()` returns successfully.
+**Entry Condition:** `UsagixSpawn()` returns successfully.
 
 **Invariants:**
 - The agent process has been initialized but has not yet established an identity boundary.
 - No cognitive work (inference, reasoning, planning) occurs in this state.
-- The substrate must not deliver `UsageYield()` requests from the agent; any such requests are dropped or cause an error.
+- The substrate must not deliver `UsagixYield()` requests from the agent; any such requests are dropped or cause an error.
 - The agent has not yet consumed tokens.
 - All capabilities and resource quotas are in place but unenforced.
 
@@ -103,12 +103,12 @@ The substrate prepares the agent's execution environment: allocates memory, sets
 - The agent is ready to begin reasoning but has not yet started inference.
 - No cognitive operations (inference, tool invocations) have occurred.
 - Token budget tracking is initialized; tokens consumed counter starts at zero.
-- Capabilities are active and will be enforced at the `UsageCallTool` boundary.
+- Capabilities are active and will be enforced at the `UsagixCallTool` boundary.
 - **NEW in v2:** The substrate may pause the agent from this state without forcing inference, enabling cold-start scheduling.
 
 **Valid Transitions:**
 - → THINKING: The substrate directs the agent to begin reasoning, triggering the first inference cycle.
-- → **PAUSED** (NEW in v2): The substrate immediately pauses the agent for orchestration/scheduling purposes, without initiating inference. Used for proactive cold-start scheduling in high-density environments. Agent context is serialized via `UsageYield()` or a substrate-initiated checkpoint.
+- → **PAUSED** (NEW in v2): The substrate immediately pauses the agent for orchestration/scheduling purposes, without initiating inference. Used for proactive cold-start scheduling in high-density environments. Agent context is serialized via `UsagixYield()` or a substrate-initiated checkpoint.
 - → TERMINATED: Substrate sends `SIG_AGENT_TERMINATE`, or a fatal initialization error occurs.
 
 **Semantic Behavior:**
@@ -128,14 +128,14 @@ This dual-path behavior enables advanced enterprise scheduling: substrates can p
 **Invariants:**
 - The agent is actively engaged in inference, planning, or reasoning.
 - The model is consuming tokens; token budget tracking is active.
-- The agent may issue `UsageCallTool()` requests; the substrate gates each request against the agent's capability set.
-- The agent may issue `UsageMemPageOut()` requests to manage its memory tiers.
-- The agent may issue `UsageMemPageIn()` requests to rehydrate paged context.
-- The agent does not issue `UsageYield()` while in the THINKING state, unless explicitly transitioning to PAUSED.
+- The agent may issue `UsagixCallTool()` requests; the substrate gates each request against the agent's capability set.
+- The agent may issue `UsagixMemPageOut()` requests to manage its memory tiers.
+- The agent may issue `UsagixMemPageIn()` requests to rehydrate paged context.
+- The agent does not issue `UsagixYield()` while in the THINKING state, unless explicitly transitioning to PAUSED.
 - The substrate monitors token consumption against the quota; if the agent exceeds its budget, the substrate sends `SIG_AGENT_TERMINATE`.
 
 **Valid Transitions:**
-- → PAUSED: The agent calls `UsageYield()`, serializing its state and yielding control. The agent transitions to PAUSED and awaits substrate action.
+- → PAUSED: The agent calls `UsagixYield()`, serializing its state and yielding control. The agent transitions to PAUSED and awaits substrate action.
 - → THINKING: The agent continues reasoning without yielding (looping within THINKING state).
 - → TERMINATED: `SIG_AGENT_TERMINATE` is received, token budget is exceeded, or a timeout occurs.
 
@@ -144,10 +144,10 @@ This is the primary productive state. The agent performs inference in a tight lo
 
 1. Execute model forward pass (inference).
 2. Update reasoning state.
-3. Optionally invoke tools via `UsageCallTool()` or stream tools via `UsageCallToolStream()`.
-4. Optionally page memory out via `UsageMemPageOut()` or page memory in via `UsageMemPageIn()`.
+3. Optionally invoke tools via `UsagixCallTool()` or stream tools via `UsageCallToolStream()`.
+4. Optionally page memory out via `UsagixMemPageOut()` or page memory in via `UsagixMemPageIn()`.
 5. Check for signals; if `SIG_AGENT_PAUSE` is received, prepare to transition to PAUSED.
-6. Optionally yield via `UsageYield()` for checkpointing or memory management.
+6. Optionally yield via `UsagixYield()` for checkpointing or memory management.
 7. Repeat until yielding, signal termination, or timeout.
 
 If token budget is exceeded during THINKING, the substrate immediately transitions to TERMINATED and delivers `SIG_AGENT_TERMINATE`.
@@ -157,7 +157,7 @@ If token budget is exceeded during THINKING, the substrate immediately transitio
 #### State 4: PAUSED
 
 **Entry Condition:** 
-- Agent calls `UsageYield()` while in THINKING, OR
+- Agent calls `UsagixYield()` while in THINKING, OR
 - Substrate sends `SIG_AGENT_PAUSE` while agent is in THINKING, OR
 - **NEW in v2:** Substrate initiates cold-start scheduling transition from ACTIVE → PAUSED
 
@@ -167,7 +167,7 @@ If token budget is exceeded during THINKING, the substrate immediately transitio
 - Token budget tracking is frozen at the point of yield/pause.
 - The substrate may inspect, modify, or persist the serialized state for governance purposes.
 - No further token consumption occurs until resumption.
-- Memory tier transitions triggered by `UsageMemPageOut()` or `UsageMemPageIn()` requests issued during THINKING have completed; the agent awaits their results.
+- Memory tier transitions triggered by `UsagixMemPageOut()` or `UsagixMemPageIn()` requests issued during THINKING have completed; the agent awaits their results.
 - **NEW in v2:** If entered from ACTIVE (cold-start scheduling), no tokens have been consumed yet, and full context serialization may be lighter-weight.
 
 **Valid Transitions:**
@@ -202,7 +202,7 @@ The agent may remain in PAUSED for an indefinite duration. The substrate may evi
 - No further RPCs are accepted on this `session_id`.
 - The final state snapshot (if available) is archived for audit and replay.
 - Token consumption is finalized; the session's accounting is closed.
-- All tools are forcibly released; pending `UsageCallTool()` operations are aborted.
+- All tools are forcibly released; pending `UsagixCallTool()` operations are aborted.
 
 **Valid Transitions:**
 - → None (absorbing state). TERMINATED is a final state. No further transitions are possible.
@@ -232,7 +232,7 @@ The following table defines the legal state transitions:
 | ACTIVE | Begin reasoning | THINKING | Substrate directs model inference to start | |
 | **ACTIVE** | **Cold-start scheduling pause** | **PAUSED** | **Substrate needs to queue agent for later activation** | **✅ NEW** |
 | ACTIVE | SIG_AGENT_TERMINATE | TERMINATED | Substrate or external source sends terminate signal | |
-| THINKING | UsageYield() | PAUSED | Agent serializes state and yields control | |
+| THINKING | UsagixYield() | PAUSED | Agent serializes state and yields control | |
 | THINKING | Continue looping | THINKING | Agent continues inference without yielding | |
 | THINKING | SIG_AGENT_PAUSE | PAUSED | Substrate sends pause signal; agent transitions after current op completes | |
 | THINKING | Token quota exceeded | TERMINATED | Substrate enforces budget; agent exceeds max_tokens_quota | |
@@ -264,9 +264,9 @@ Enterprise orchestrators (Kubernetes, OpenStack, proprietary cloud platforms) of
 
 ### Traditional Problem
 
-Prior USAGE v1 strictly required: PENDING → ACTIVE → THINKING before PAUSED. This forced substrates to either:
+Prior USAGIX v1 strictly required: PENDING → ACTIVE → THINKING before PAUSED. This forced substrates to either:
 1. Begin inference immediately (wasting tokens and computational resources)
-2. Use external scheduling outside the USAGE boundary (violating the "complete abstraction" principle)
+2. Use external scheduling outside the USAGIX boundary (violating the "complete abstraction" principle)
 
 ### v2 Solution: Direct ACTIVE → PAUSED Transition
 
@@ -286,16 +286,16 @@ Even with direct ACTIVE → PAUSED, governance is maintained:
 
 ---
 
-## Memory Serialization During UsageYield
+## Memory Serialization During UsagixYield
 
-When an agent in the THINKING state calls `UsageYield()`, the following steps occur:
+When an agent in the THINKING state calls `UsagixYield()`, the following steps occur:
 
 ### Step 1: Context Serialization with Structured Header
 
 The agent encodes its full reasoning state into a `CheckpointHeaderAndPayload` message:
 
 **Header (Standardized, Inspectable):**
-- `format_version`: "1.0" for USAGE v1
+- `format_version`: "1.0" for USAGIX v1
 - `checkpoint_timestamp`: Unix timestamp of serialization
 - `total_tokens_consumed`: Cumulative token count for quota reconciliation
 - `active_attention_window_indices`: Active attention heads (for model capability alignment)
@@ -330,11 +330,11 @@ remaining_budget = initial_quota - tokens_consumed_at_yield
 
 While the agent is PAUSED, the substrate may automatically manage memory tiers:
 
-- **L1 Eviction**: The agent's L1 context window is flushed to L2 cache or L3 storage via `UsageMemPageOut()`.
+- **L1 Eviction**: The agent's L1 context window is flushed to L2 cache or L3 storage via `UsagixMemPageOut()`.
 - **L2/L3 Compaction**: Compress or deduplicate context artifacts stored in L2/L3.
 - **L2/L3 Garbage Collection**: Old, unreferenced state may be discarded per configured policy.
 
-The substrate preserves memory_tier_locators from the header so rehydration via `UsageMemPageIn()` is possible.
+The substrate preserves memory_tier_locators from the header so rehydration via `UsagixMemPageIn()` is possible.
 
 ### Step 5: Resumption
 
@@ -350,7 +350,7 @@ When the substrate resumes the agent (via external signal or timeout), it:
 ### Cross-Substrate Portability
 
 The structured header ensures **portability:**
-- Any USAGE-compliant substrate can inspect the header to understand checkpoint semantics.
+- Any USAGIX-compliant substrate can inspect the header to understand checkpoint semantics.
 - Token offsets, tool call depth, and capability state are standardized fields.
 - The opaque payload can be safely stored/archived even on substrates that cannot deserialize it.
 - Governance engines can audit compliance using only the header, without decoding opaque vendor-specific data.
@@ -359,13 +359,13 @@ The structured header ensures **portability:**
 
 ## Virtual Memory Control Loop: PageOut and PageIn
 
-USAGE v2 introduces complementary `UsageMemPageOut()` and `UsageMemPageIn()` system calls to enable true demand-paged virtual memory.
+USAGIX v2 introduces complementary `UsagixMemPageOut()` and `UsagixMemPageIn()` system calls to enable true demand-paged virtual memory.
 
 ### PageOut: Eviction from Hot to Cool Tiers
 
 ```
 Agent (THINKING state) → 
-  UsageMemPageOut(source=L1, target=L2, token_payload) →
+  UsagixMemPageOut(source=L1, target=L2, token_payload) →
   Substrate stores payload in L2 cache (Redis, pgvector, SSD) →
   Returns address_reference ("redis://key" or "s3://path") →
   Agent records reference for later retrieval
@@ -375,7 +375,7 @@ Agent (THINKING state) →
 
 ```
 Agent (THINKING state) → 
-  UsageMemPageIn(source=L2, target=L1, address_reference) →
+  UsagixMemPageIn(source=L2, target=L1, address_reference) →
   Substrate enforces governance policies (audit logging, content filtering, PII scrubbing) →
   Substrate retrieves payload from L2 cache →
   Returns token_payload to agent →
@@ -401,10 +401,10 @@ tokens_consumed(t1) <= tokens_consumed(t2) for t1 < t2
 If resumption occurs, token counts from previous checkpoints are preserved.
 
 ### Invariant 3: State Snapshot Consistency
-If an agent yields via `UsageYield()`, the serialized state (checkpoint header + opaque payload) must be completely consistent and complete. The substrate must not accept partial or corrupted snapshots. Resumption from a checkpoint must restore the agent to an identical cognitive state.
+If an agent yields via `UsagixYield()`, the serialized state (checkpoint header + opaque payload) must be completely consistent and complete. The substrate must not accept partial or corrupted snapshots. Resumption from a checkpoint must restore the agent to an identical cognitive state.
 
 ### Invariant 4: Capability Enforcement at Tool Boundary
-Every `UsageCallTool()` request (issued while in THINKING state) must be validated against the agent's granted capabilities. If a tool is not in the `allowedTools` list, the substrate must reject the request and send `ToolResponse.execution_success = false` with an appropriate error message. The agent must not be able to invoke unauthorized tools.
+Every `UsagixCallTool()` request (issued while in THINKING state) must be validated against the agent's granted capabilities. If a tool is not in the `allowedTools` list, the substrate must reject the request and send `ToolResponse.execution_success = false` with an appropriate error message. The agent must not be able to invoke unauthorized tools.
 
 ### Invariant 5: Signal Atomicity
 When a signal is delivered (SIG_AGENT_TERMINATE, SIG_AGENT_PAUSE, etc.), the state transition must be atomic. The agent must not observe a partial state change. Either the signal is fully processed and the state transition completes, or the signal is rejected and state is unchanged.
@@ -457,7 +457,7 @@ Timeouts are configurable per-agent.
 
 Let `S` be the set of all valid states: `S = {PENDING, ACTIVE, THINKING, PAUSED, TERMINATED}`.
 
-Let `Σ` be the set of all signals and events: `Σ = {SpawnOK, IdentityVerified, BeginReasoning, ColdStartPause, UsageYield, SIG_AGENT_TERMINATE, SIG_AGENT_PAUSE, TokenQuotaExceeded, SessionTimeout, SignalResume}`.
+Let `Σ` be the set of all signals and events: `Σ = {SpawnOK, IdentityVerified, BeginReasoning, ColdStartPause, UsagixYield, SIG_AGENT_TERMINATE, SIG_AGENT_PAUSE, TokenQuotaExceeded, SessionTimeout, SignalResume}`.
 
 The state transition function `δ: S × Σ → S` is defined by the updated transition table above. Undefined transitions (not listed in the legal transitions table) are **rejected** and leave state unchanged.
 
@@ -472,7 +472,7 @@ For all i, j where i < j:
 consumed(sᵢ) ≤ consumed(sⱼ) ≤ budget_initial
 ```
 
-If j is a PAUSED state and i is a THINKING state immediately preceding j (via UsageYield), then:
+If j is a PAUSED state and i is a THINKING state immediately preceding j (via UsagixYield), then:
 ```
 consumed(sⱼ) = YieldRequest.tokens_consumed
 ```
@@ -545,15 +545,15 @@ A substrate is compliant with this RFC if it:
 - [ ] Enforces legal transitions; rejects illegal transitions.
 - [ ] Supports new ACTIVE → PAUSED transition for cold-start scheduling (v2).
 - [ ] Initializes token budget tracking at spawn time.
-- [ ] Preserves token budgets across checkpoints (UsageYield).
+- [ ] Preserves token budgets across checkpoints (UsagixYield).
 - [ ] Enforces token quota limits; terminates agents that exceed budget.
-- [ ] Serializes agent context during UsageYield with CheckpointHeaderAndPayload.
+- [ ] Serializes agent context during UsagixYield with CheckpointHeaderAndPayload.
 - [ ] Validates checkpoint headers and verifies SHA-256 integrity.
 - [ ] Assigns checkpoint_id for future retrieval.
 - [ ] Restores agent context during resumption; preserves token counts.
-- [ ] Implements UsageMemPageOut for tier eviction.
-- [ ] Implements UsageMemPageIn for tier rehydration (v2).
-- [ ] Enforces capability gating at the UsageCallTool boundary.
+- [ ] Implements UsagixMemPageOut for tier eviction.
+- [ ] Implements UsagixMemPageIn for tier rehydration (v2).
+- [ ] Enforces capability gating at the UsagixCallTool boundary.
 - [ ] Delivers signals atomically and logs all transitions.
 - [ ] Detects and rejects illegal transition attempts.
 - [ ] Recovers from serialized state corruption (via termination).
@@ -571,13 +571,13 @@ Future RFCs may extend the state machine with:
 - **Checkpointing Strategies:** Multiple checkpoint policies (incremental, differential, etc.).
 - **Multi-Agent Coordination:** States for agent-to-agent handoff and coordination.
 
-All extensions must maintain backward compatibility with USAGE v1.0 and v2.0 state machine semantics.
+All extensions must maintain backward compatibility with USAGIX v1.0 and v2.0 state machine semantics.
 
 ---
 
 ## References
 
-- USAGE Core Specification (`spec/usage-core.md`)
+- USAGIX Core Specification (`spec/usage-core.md`)
 - ASI System Calls Specification (`spec/asi-system-calls.md`)
 - Memory Model Specification (`spec/memory-model.md`)
 - OCI Runtime Specification (inspired state machine design)
@@ -587,6 +587,6 @@ All extensions must maintain backward compatibility with USAGE v1.0 and v2.0 sta
 ## Approval
 
 **Status:** APPROVED (v2 update approved 2026-05-16)  
-**Approved By:** [USAGE Specification Committee]  
+**Approved By:** [USAGIX Specification Committee]  
 **Approval Date:** 2026-05-16  
 **Implementation Deadline:** Substrates must be compliant with v2 by 2026-12-01.

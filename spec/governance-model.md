@@ -1,6 +1,6 @@
 # Governance Model Specification
 
-This document details the capability model, policy enforcement engine, quota system, and audit requirements for USAGE-compliant substrates.
+This document details the capability model, policy enforcement engine, quota system, and audit requirements for USAGIX-compliant substrates.
 
 ## Conventions (Normative Language)
 
@@ -31,7 +31,7 @@ Lookup Capability Token
 
 ## 2. Capability Token Structure
 
-A **capability token** is the unit of authorization in USAGE. It grants permission for an agent to invoke a specific tool or perform a specific operation.
+A **capability token** is the unit of authorization in USAGIX. It grants permission for an agent to invoke a specific tool or perform a specific operation.
 
 ```protobuf
 message CapabilityToken {
@@ -120,7 +120,7 @@ Continue with agent identity [agent_id]
 
 ### Step 2: Capability Lookup
 ```
-Request: UsageCallTool(session_id, tool_id, operation, arguments)
+Request: UsagixCallTool(session_id, tool_id, operation, arguments)
     ↓
 Substrate queries capability ledger:
   SELECT capability FROM ledger 
@@ -213,7 +213,7 @@ Emit metrics (Prometheus, CloudWatch)
 
 ## 4. Quota System
 
-USAGE manages three types of quotas:
+USAGIX manages three types of quotas:
 
 ### 4.1 Token Budget
 ```protobuf
@@ -457,7 +457,7 @@ Next tool call with cap-xxx:
 Scenario: Agent requests to DELETE user from database
 
 Agent makes request:
-  UsageCallTool(
+  UsagixCallTool(
     session_id="ag-12345",
     tool_id="database.query",
     operation="DELETE",

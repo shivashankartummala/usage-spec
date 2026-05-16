@@ -1,17 +1,17 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://usage-spec.io/schemas/agent_manifest.schema.json",
-  "title": "USAGE Agent Manifest Schema",
-  "description": "JSON Schema (Draft 7) for USAGE-compliant agent deployment manifests. Defines the structure, constraints, and validation rules for AgentManifest.yaml files that describe autonomous agent workloads.",
+  "$id": "https://mantle.sh/schemas/agent_manifest.schema.json",
+  "title": "Mantle Agent Manifest Schema (USAGIX Protocol)",
+  "description": "JSON Schema (Draft 7) for USAGIX-compliant agent deployment manifests. Defines the structure, constraints, and validation rules for AgentManifest.yaml files that describe autonomous agent workloads. Part of the Mantle ecosystem implementing the USAGIX protocol standard.",
   "type": "object",
   "required": ["apiVersion", "kind", "metadata", "spec"],
   "additionalProperties": false,
   "properties": {
     "apiVersion": {
       "type": "string",
-      "description": "API version of the manifest specification. Currently must be 'usage.io/v1' for USAGE v1.0 compliance.",
-      "enum": ["usage.io/v1"],
-      "examples": ["usage.io/v1"]
+      "description": "API version of the manifest specification. Currently must be 'mantle.sh/v1alpha1' for USAGIX v1.0 compliance in the Mantle ecosystem.",
+      "enum": ["mantle.sh/v1alpha1"],
+      "examples": ["mantle.sh/v1alpha1"]
     },
     "kind": {
       "type": "string",
@@ -71,7 +71,7 @@
             },
             "maxTokensQuota": {
               "type": "integer",
-              "description": "MaxTokensQuota is the maximum number of tokens the agent is allowed to consume per session. Enforced by the runtime; exceeding this quota triggers termination with SIG_AGENT_TERMINATE.",
+              "description": "MaxTokensQuota is the maximum number of tokens the agent is allowed to consume per session. Enforced by the USAGIX runtime; exceeding this quota triggers termination with SIG_AGENT_TERMINATE.",
               "minimum": 1,
               "maximum": 1000000000,
               "examples": [1000000, 10000000, 100000000]
@@ -115,7 +115,7 @@
             },
             "allowedTools": {
               "type": "array",
-              "description": "AllowedTools is a list of tool registry names the agent is permitted to invoke. Tool names follow the pattern 'namespace.tool_name'. The substrate denies invocations of unlisted tools at the UsageCallTool boundary.",
+              "description": "AllowedTools is a list of tool registry names the agent is permitted to invoke. Tool names follow the pattern 'namespace.tool_name'. The substrate denies invocations of unlisted tools at the UsagixCallTool boundary.",
               "items": {
                 "type": "string",
                 "pattern": "^[a-z0-9]+\\.[a-z0-9._-]+$",
@@ -161,7 +161,7 @@
         },
         "memory": {
           "type": "object",
-          "description": "Memory specifies the agent's memory configuration across the three-tier storage model.",
+          "description": "Memory specifies the agent's memory configuration across the three-tier storage model defined by USAGIX.",
           "required": ["l1ContextWindow", "l2CacheProvider"],
           "additionalProperties": false,
           "properties": {
@@ -257,7 +257,7 @@
     },
     "extensions": {
       "type": "object",
-      "description": "Extensions is an optional block for vendor-specific infrastructure configurations and optimizations. This block allows substrate vendors (e.g., Myelin-AX, proprietary enterprise substrates) to declare implementation-specific settings while keeping all core USAGE properties strictly standardized and portable.",
+      "description": "Extensions is an optional block for vendor-specific infrastructure configurations and optimizations. This block allows USAGIX substrate vendors (e.g., Myelin-AX for Kubernetes, proprietary enterprise substrates) to declare implementation-specific settings while keeping all core USAGIX properties strictly standardized and portable.",
       "additionalProperties": true,
       "examples": [
         {
@@ -291,7 +291,7 @@
   },
   "examples": [
     {
-      "apiVersion": "usage.io/v1",
+      "apiVersion": "mantle.sh/v1alpha1",
       "kind": "SovereignAgent",
       "metadata": {
         "name": "research-assistant",

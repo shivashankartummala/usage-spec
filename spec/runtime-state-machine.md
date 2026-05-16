@@ -13,7 +13,7 @@ All normative statements in this specification are binding on compliant substrat
 
 ## 1. State Definitions
 
-USAGE defines exactly **5 states** in the agent lifecycle:
+USAGIX defines exactly **5 states** in the agent lifecycle:
 
 ### 1.1 PENDING
 
@@ -35,7 +35,7 @@ USAGE defines exactly **5 states** in the agent lifecycle:
 
 **Example Sequence**:
 ```
-2:00 PM: UsageSpawn() called
+2:00 PM: UsagixSpawn() called
          Response: session_id="ag-xxx", state=PENDING
          
 2:00:01 PM: Policy validation, infrastructure checks
@@ -99,7 +99,7 @@ OR
 **Characteristics**:
 - LLM inference happening (tokens being consumed)
 - Agent processing tool results
-- Tool invocations happening (via UsageCallTool)
+- Tool invocations happening (via UsagixCallTool)
 - Token budget decrementing
 - Governance decisions being logged
 - Agent is "busy" (cannot be paused except via emergency)
@@ -119,7 +119,7 @@ OR
             Agent processes result
             
 2:00:26 PM: Agent calls tool:
-            UsageCallTool(tool="database.query", ...)
+            UsagixCallTool(tool="database.query", ...)
             Substrate validates capability → allowed
             Tool executes, returns result
             (Still in THINKING state during tool execution)
@@ -127,14 +127,14 @@ OR
 2:00:30 PM: Tool completes
             Agent processes tool result
             Decides: "I have enough info, yield"
-            Calls UsageYield()
+            Calls UsagixYield()
             Substrate transitions: THINKING → PAUSED
             Checkpoint created
             
 OR
             
 2:00:30 PM: Agent calls tool:
-            UsageCallTool(tool="database.query", ...)
+            UsagixCallTool(tool="database.query", ...)
             Substrate checks token budget: 500K consumed, 500K budget
             Denial: RESOURCE_EXHAUSTED
             
@@ -458,11 +458,11 @@ Use Case: Batch processing at scheduled times
 
 ### 4.2 State Machine Support
 
-USAGE v2 authorizes: **ACTIVE → PAUSED transition**
+USAGIX v2 authorizes: **ACTIVE → PAUSED transition**
 
 ```
 Timeline:
-2:00 PM: UsageSpawn()
+2:00 PM: UsagixSpawn()
          Response: state=PENDING
          
 2:00:01 PM: UsageSetState(target_state=ACTIVE)
@@ -496,7 +496,7 @@ Traditional approach (without cold-start):
   - Tokens consumed: ~5-10K (inference overhead, polling)
   - Cost: $0.05-$0.10 per agent
 
-Cold-start approach (with USAGE):
+Cold-start approach (with USAGIX):
   - Spawn agent at 2:00 PM
   - Agent remains PAUSED (no tokens)
   - Resume at 2:30 PM when batch window opens
@@ -512,14 +512,14 @@ Annual savings: $520-$1040 (assuming 2 batch cycles per day)
 ### 5.1 Example 1: Normal Completion
 
 ```
-2:00 PM: UsageSpawn()
+2:00 PM: UsagixSpawn()
          ↓ PENDING
 
 2:00:01 PM: UsageSetState(ACTIVE)
             ↓ ACTIVE
 
 2:00:05 PM: Agent begins work
-            UsageCallTool(tool="database.query", ...)
+            UsagixCallTool(tool="database.query", ...)
             (Still in ACTIVE, awaiting tool result)
             ↓ ACTIVE
 

@@ -1,16 +1,17 @@
-# USAGE: Universal Substrate for Agent Governance Enforcement
+# USAGIX Protocol: Universal Substrate for Agent Governance Enforcement
 
-**Specification Version**: 1.0.0 | **Status**: Stable (candidate for open standard)
+**Specification Version**: 1.0.0 | **Status**: Stable (candidate for open standard)  
+**Ecosystem**: Mantle | **API Version**: mantle.sh/v1alpha1
 
-## What is USAGE?
+## What is USAGIX?
 
-USAGE is an open interface specification for executing autonomous agent processes under strict substrate governance. It standardizes the boundary between cognitive workloads and execution substrates, analogous to the role of POSIX between applications and operating systems. USAGE defines control-plane and data-plane contracts for lifecycle, signaling, memory paging, tool mediation, quota enforcement, and auditability.
+USAGIX is an open interface specification for executing autonomous agent processes under strict substrate governance. It standardizes the boundary between cognitive workloads and execution substrates, analogous to the role of POSIX between applications and operating systems. USAGIX defines control-plane and data-plane contracts for lifecycle, signaling, memory paging, tool mediation, quota enforcement, and auditability.
 
-USAGE is **substrate-agnostic**: a single USAGE specification can be implemented by Kubernetes substrates, serverless platforms, WASM runtimes, or traditional VMs. The spec defines the abstract trust-domain-separated architecture; each substrate implements the plumbing differently.
+USAGIX is **substrate-agnostic**: a single USAGIX protocol implementation can run on Kubernetes substrates, serverless platforms, WASM runtimes, or traditional VMs. The spec defines the abstract trust-domain-separated architecture; each substrate implements the plumbing differently.
 
 ## Reference Implementation
 
-**Myelin-AX** is a Kubernetes-native reference implementation of USAGE. It uses CRDs, an operator, mutating admission, and sidecar-based governance to enforce zero-trust execution semantics for agent processes. See [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) for Myelin-AX specific details.
+**Myelin-AX** is a Kubernetes-native reference implementation of the USAGIX protocol. It uses CRDs, an operator, mutating admission, and sidecar-based governance to enforce zero-trust execution semantics for agent processes in the Mantle ecosystem. See [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) for Myelin-AX specific details.
 
 ## Governance & Legal
 
@@ -24,11 +25,11 @@ USAGE is **substrate-agnostic**: a single USAGE specification can be implemented
 
 ### For Specification & Community
 
-- **[ROADMAP.md](ROADMAP.md)** — Multi-year specification evolution plan (v1.0 stable → v2.0 breaking changes → CNCF graduation)
-- **[CHARTER.md](CHARTER.md)** — Project charter, mission, vision, and governance structure
-- **[ADOPTERS.md](ADOPTERS.md)** — Organizations implementing or adopting USAGE; contribution guidelines for adding implementations
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** — How to contribute to USAGE (bug reports, RFCs, PRs, DCO signing)
-- **[SECURITY.md](SECURITY.md)** — Security guarantees, vulnerability disclosure, and security best practices
+- **[ROADMAP.md](ROADMAP.md)** — Multi-year USAGIX protocol evolution plan (v1.0 stable → v2.0 breaking changes → CNCF graduation)
+- **[CHARTER.md](CHARTER.md)** — Project charter, mission, vision, and governance structure for the Mantle/USAGIX ecosystem
+- **[ADOPTERS.md](ADOPTERS.md)** — Organizations implementing or adopting USAGIX; contribution guidelines for adding implementations
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — How to contribute to USAGIX (bug reports, RFCs, PRs, DCO signing)
+- **[SECURITY.md](SECURITY.md)** — USAGIX security guarantees, vulnerability disclosure, and security best practices
 
 ### For Implementation & Development
 
@@ -59,7 +60,7 @@ USAGE is **substrate-agnostic**: a single USAGE specification can be implemented
 ### For Substrate Developers
 
 - **[reference/myelin-ax/](reference/myelin-ax/)** — Kubernetes-native reference implementation
-  - [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) — Myelin-AX design and mapping to USAGE
+  - [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) — Myelin-AX design and mapping to USAGIX
   - [reference/myelin-ax/deployment/](reference/myelin-ax/deployment/) — Kubernetes manifests and deployment examples
   - [reference/myelin-ax/policies/](reference/myelin-ax/policies/) — Example governance policies
 
@@ -67,7 +68,7 @@ USAGE is **substrate-agnostic**: a single USAGE specification can be implemented
 <details>
 <summary>Expand The Case for an Agent OS</summary>
 
-USAGE addresses not only technical orchestration but also enterprise governance and liability requirements for autonomous digital workers.
+USAGIX addresses not only technical orchestration but also enterprise governance and liability requirements for autonomous digital workers.
 
 See: [case-for-agent-os.md](spec/case-for-agent-os.md)
 
@@ -84,7 +85,7 @@ Current agent deployments exhibit five systemic failures:
 - Agent memory wall: prompt growth, context degradation, and no explicit paging semantics.
 - Coordination chaos: recursive loops, orphaned subtasks, and undefined supervision semantics.
 
-USAGE addresses these failures by defining an operating substrate contract instead of another application framework.
+USAGIX addresses these failures by defining an operating substrate contract instead of another application framework.
 
 </details>
 
@@ -92,7 +93,7 @@ USAGE addresses these failures by defining an operating substrate contract inste
 <details>
 <summary>Expand Definitive Scope Trigger</summary>
 
-USAGE uses an operational binary for classification. A workload is classified as an AI Agent under USAGE when both are true:
+USAGIX uses an operational binary for classification. A workload is classified as an AI Agent under USAGIX when both are true:
 - Inference Core Invocation: it invokes one or more foundation model or LLM calls to determine state or control flow.
 - Peripheral Access Capabilities: it can invoke external tools, databases, web APIs, or native host system calls.
 
@@ -104,7 +105,7 @@ This rule applies to scripts, binaries, background services, and active workload
 <details>
 <summary>Expand Absolute Boundary Condition</summary>
 
-No exemptions are granted based on implementation size or framework choice. Once the scope trigger is satisfied, the workload is inside the USAGE runtime boundary and MUST:
+No exemptions are granted based on implementation size or framework choice. Once the scope trigger is satisfied, the workload is inside the USAGIX runtime boundary and MUST:
 - Relinquish direct external side-effect pathways outside substrate mediation.
 - Authenticate through a distinct cryptographically verifiable workload identity.
 - Route all external actions through substrate tool-proxy enforcement.
@@ -133,7 +134,7 @@ Substrate non-compliance handling is terminal (`SIG_AGENT_TERMINATE`).
 <details>
 <summary>Expand Protocol Stack</summary>
 
-USAGE specifies a four-layer stack:
+USAGIX specifies a four-layer stack:
 - Layer 4: Cognitive Application Layer
 - Layer 3: Governance and Aspect Layer
 - Layer 2: Runtime and Execution Layer
@@ -145,7 +146,7 @@ Detailed specification: [usage-core.md](spec/usage-core.md)
 
 ## Runtime Architecture
 
-USAGE enforces strict trust-domain separation:
+USAGIX enforces strict trust-domain separation:
 - **Cognitive Container** (Untrusted): Agent process running LLM inference and user logic
 - **Governance Enforcement Plane** (Trusted): Mediation layer validating capabilities, enforcing policies, and auditing decisions
 - **Tool Executor** (Isolated): Sandboxed execution of external tools with per-tool isolation
@@ -158,12 +159,12 @@ All external actions from the Cognitive Container route through the Governance E
 <details>
 <summary>Expand System Calls (ASI)</summary>
 
-USAGE defines the Agent Substrate Interface over gRPC:
-- `UsageSpawn`
-- `UsageYield`
-- `UsageSignal`
-- `UsageMemPageOut`
-- `UsageCallTool`
+USAGIX defines the Agent Substrate Interface over gRPC:
+- `UsagixSpawn`
+- `UsagixYield`
+- `UsagixSignal`
+- `UsagixMemPageOut`
+- `UsagixCallTool`
 
 Formal contracts: [asi.proto](proto/usage/v1/asi.proto)
 
@@ -212,7 +213,7 @@ Source: [memory-model.md](spec/memory-model.md)
 ## Page Semantics
 - Page Unit: opaque context segment with policy labels.
 - Page Metadata: `{page_id, hash, sensitivity, ttl, lineage}`.
-- `UsageMemPageOut` demotes pages L1->L2/L3.
+- `UsagixMemPageOut` demotes pages L1->L2/L3.
 
 ## Invariants
 - Sensitive pages MUST carry policy labels across tiers.
@@ -290,12 +291,12 @@ Each decision MUST record:
 Source: [coordination-model.md](spec/coordination-model.md)
 
 ## Process Tree
-USAGE models agent orchestration as a supervision tree.
+USAGIX models agent orchestration as a supervision tree.
 - Parent sessions own child sessions.
 - Ownership includes budget partitioning and termination semantics.
 
 ## Spawn Semantics
-- Parent MAY allocate sub-budget to child at `UsageSpawn`.
+- Parent MAY allocate sub-budget to child at `UsagixSpawn`.
 - Child MUST inherit policy floor from parent; narrowing is allowed, widening is denied.
 
 ## Failure Semantics
@@ -345,7 +346,7 @@ Implementation is compliant when all mandatory tests pass for declared profile.
 Source: [otel-semconv-proposal.md](spec/otel-semconv-proposal.md)
 
 ## Scope
-Defines telemetry attributes and events for USAGE substrates.
+Defines telemetry attributes and events for USAGIX substrates.
 
 ## Resource Attributes
 - `usage.substrate.name`
@@ -436,9 +437,9 @@ Source: [asi-compliance-tests.md](compliance-tests/asi-compliance-tests.md)
 - Terminated sessions reject further syscalls.
 
 ## Syscall Behavior
-- `UsageSignal` idempotency by `(session_id, sequence)`.
-- `UsageCallTool` deny path includes policy decision metadata.
-- `UsageMemPageOut` returns integrity-reference per page.
+- `UsagixSignal` idempotency by `(session_id, sequence)`.
+- `UsagixCallTool` deny path includes policy decision metadata.
+- `UsagixMemPageOut` returns integrity-reference per page.
 
 ## Governance
 - Capability violation yields `PERMISSION_DENIED`.
@@ -458,12 +459,12 @@ Source: [asi-compliance-tests.md](compliance-tests/asi-compliance-tests.md)
 <details>
 <summary>Expand Architecture Diagrams</summary>
 
-### 1) USAGE Protocol Stack
+### 1) USAGIX Protocol Stack
 Source: [usage-protocol-stack.mmd](diagrams/usage-protocol-stack.mmd)
 
 ```mermaid
 graph TD
-  %% USAGE Protocol Stack
+  %% USAGIX Protocol Stack
   subgraph L4["Layer 4 - Cognitive Application Layer"]
     L4P["Prompts"]
     L4M["LLMs"]
@@ -528,7 +529,7 @@ graph LR
     end
 
     subgraph MP["Container: myelin-proxy (Kernel Space / Sidecar)"]
-      MP1["USAGE gRPC Server"]
+      MP1["USAGIX gRPC Server"]
       MP2["Governance Enforcement"]
     end
 
@@ -548,7 +549,7 @@ graph LR
   MP2 -->|"ValidateAction / Policy Decisions"| OPA
 ```
 
-### 3) USAGE Process Lifecycle State Machine
+### 3) USAGIX Process Lifecycle State Machine
 Source: [usage-lifecycle-state-machine.mmd](diagrams/usage-lifecycle-state-machine.mmd)
 
 ```mermaid
@@ -557,7 +558,7 @@ stateDiagram-v2
 
   Pending --> Active: Quota Approved & Identity Issued
   Active --> Thinking: Inference / Tool Invocation Triggered
-  Thinking --> Paused: UsageYield Call / HITL Interrupt
+  Thinking --> Paused: UsagixYield Call / HITL Interrupt
   Paused --> Active: Context PageIn / Token Resume
 
   Active --> Terminated: Intent Met / Normal Execution End
@@ -600,7 +601,7 @@ sequenceDiagram
   participant PE as Policy Engine (OPA / Gatekeeper)
   participant SD as Sandboxed Tool Driver
 
-  AB->>MP: UsageCallTool(tool_name, json_args)
+  AB->>MP: UsagixCallTool(tool_name, json_args)
   Note right of MP: Pause brain thread and lock session context
   MP->>PE: ValidateAction(payload)
   PE-->>MP: AccessGranted: True

@@ -1,6 +1,6 @@
 # Memory Virtualization Model Specification
 
-USAGE implements a **cognitive memory tier system** that differs fundamentally from traditional virtual memory (pages, DRAM, swap). This document specifies how agent context is managed across three tiers: active window (L1), warm cache (L2), and cold storage (L3).
+USAGIX implements a **cognitive memory tier system** that differs fundamentally from traditional virtual memory (pages, DRAM, swap). This document specifies how agent context is managed across three tiers: active window (L1), warm cache (L2), and cold storage (L3).
 
 ## Conventions (Normative Language)
 
@@ -21,7 +21,7 @@ Traditional operating systems manage **physical memory**: DRAM pages are swapped
 - Governance constraints apply to memory (agent can't access unauthorized context)
 - Memory tiers have different **cost characteristics**: L1 is in-process (free), L2 is cache hits ($0.001/request), L3 is S3 gets ($0.0001/request + transfer)
 
-USAGE treats context as a **managed resource** with explicit tiering, not a side-effect of physical memory pressure.
+USAGIX treats context as a **managed resource** with explicit tiering, not a side-effect of physical memory pressure.
 
 ## 2. Three-Tier Memory System
 
@@ -117,7 +117,7 @@ Example L3 storage paths:
 ```
 Agent's L1 context fills to 128K tokens
     ↓
-Agent calls UsageMemPageOut(
+Agent calls UsagixMemPageOut(
   pages_to_evict=[PageReference(page_id=1, size=50K)],
   target_tier=L2
 )
@@ -160,7 +160,7 @@ message PageOutMetadata {
 ```
 Agent references: redis://cache.internal/ag-xxx/page-1
     ↓
-Agent calls UsageMemPageIn(
+Agent calls UsagixMemPageIn(
   page_reference="redis://cache.internal/ag-xxx/page-1"
 )
     ↓
@@ -243,7 +243,7 @@ Validation: Substrate verifies URI is within allowed domains (no SSRF)
 
 ## 5. Consistency Invariants
 
-USAGE memory system must maintain these invariants:
+USAGIX memory system must maintain these invariants:
 
 ### 5.1 Invariant 1: Single-Writer, Multiple-Reader
 
@@ -310,7 +310,7 @@ If computed hash != original hash:
 
 ### 5.5 Invariant 5: Checkpoint Alignment
 
-When agent yields (UsageYield), checkpoint header must include memory metadata:
+When agent yields (UsagixYield), checkpoint header must include memory metadata:
 
 ```protobuf
 message CheckpointHeader {
@@ -325,7 +325,7 @@ This allows substrate to restore agent state including all evicted context.
 
 ## 6. Virtual Memory Control Loop
 
-USAGE implements a **bidirectional control loop** for memory management:
+USAGIX implements a **bidirectional control loop** for memory management:
 
 ### 6.1 PageOut Control Loop (L1 → L2/L3)
 
@@ -350,7 +350,7 @@ L1 space freed; agent continues
 ```
 Agent wants to reference old context (not in L1)
     ↓
-Agent calls UsageMemPageIn(reference)
+Agent calls UsagixMemPageIn(reference)
     ↓
 Substrate revalidates governance
     ↓

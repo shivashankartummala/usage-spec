@@ -6,7 +6,7 @@
 # Author: USAGE Platform
 # Version: 1.0.0
 
-apiVersion: usage.io/v1
+apiVersion: mantle.sh/v1alpha1
 kind: CapabilitySet
 metadata:
   name: default-capabilities

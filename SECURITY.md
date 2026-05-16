@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in the USAGE specification or reference implementation, **please do not open a public GitHub issue**. Instead, report it confidentially to:
+If you discover a security vulnerability in the USAGIX specification or reference implementation, **please do not open a public GitHub issue**. Instead, report it confidentially to:
 
 **Email**: security@usage-spec.io
 
@@ -33,7 +33,7 @@ permissions, access control) instead of append-only storage, allowing
 audit log tampering by compromised substrates.
 
 Proof of Concept:
-- USAGE v1.0 audit logs stored in S3 with bucket versioning disabled
+- USAGIX v1.0 audit logs stored in S3 with bucket versioning disabled
 - A compromised substrate with S3 write access can modify logs retroactively
 - Tampering is undetectable because no cryptographic validation is specified
 
@@ -65,7 +65,7 @@ If you need an expedited timeline (e.g., active exploitation), please indicate t
 
 ### Specification Security Guarantees
 
-USAGE provides security guarantees in several areas. Implementers MUST:
+USAGIX provides security guarantees in several areas. Implementers MUST:
 
 1. **Trust Domain Separation** (Mandatory)
    - Cognitive Container runs in untrusted sandbox
@@ -105,13 +105,13 @@ USAGE provides security guarantees in several areas. Implementers MUST:
 
 See [spec/security-model.md](spec/security-model.md) for detailed threat model.
 
-**USAGE assumes the following are secure**:
+**USAGIX assumes the following are secure**:
 - Substrate implementation (code is correct)
 - Hardware/infrastructure (no physical attacks)
 - Tool implementations (tool code is correct)
 - LLM model weights (not backdoored)
 
-**USAGE does NOT defend against**:
+**USAGIX does NOT defend against**:
 - Compromised substrate code
 - Physical hardware compromise
 - Tool implementation bugs
@@ -121,7 +121,7 @@ See [spec/security-model.md](spec/security-model.md) for detailed threat model.
 
 ## Security Audits
 
-The USAGE specification undergoes regular security reviews:
+The USAGIX specification undergoes regular security reviews:
 
 ### Audit Schedule
 
@@ -161,7 +161,7 @@ Found a security bug in Myelin-AX or another reference implementation?
 1. **Follow the specification exactly**: Security guarantees depend on compliance
 2. **Implement all mandatory controls**: No exceptions for "simple" deployments
 3. **Get security audited**: Have your implementation reviewed by a security firm
-4. **Run conformance tests**: Validate compliance with USAGE test suite
+4. **Run conformance tests**: Validate compliance with USAGIX test suite
 5. **Report issues upstream**: Any specification gaps should be reported
 
 ### For Adopters
@@ -196,7 +196,7 @@ We recommend keeping implementations up-to-date with the latest specification ve
 
 ## Security Checklist for Deployments
 
-Use this checklist before deploying a USAGE-compliant substrate in production:
+Use this checklist before deploying a USAGIX-compliant substrate in production:
 
 ### Specification Compliance
 - [ ] Trust domain separation implemented (agent ≠ governance plane)
@@ -240,4 +240,4 @@ Use this checklist before deploying a USAGE-compliant substrate in production:
 ---
 
 **Last Updated**: 2025-03-15  
-**Maintained By**: USAGE Specification Stewards
+**Maintained By**: USAGIX Specification Stewards

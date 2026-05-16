@@ -1,8 +1,8 @@
-# USAGE Specification Governance
+# USAGIX Specification Governance
 
 ## Overview
 
-The USAGE specification is governed by a Technical Steering Committee (TSC) that ensures quality, 
+The USAGIX specification is governed by a Technical Steering Committee (TSC) that ensures quality, 
 consistency, and community input for all normative and architectural changes.
 
 ## Roles

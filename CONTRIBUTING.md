@@ -1,6 +1,6 @@
-# Contributing to USAGE
+# Contributing to USAGIX
 
-Thank you for your interest in contributing to the USAGE specification! This document provides guidelines for participating in the project.
+Thank you for your interest in contributing to the USAGIX specification! This document provides guidelines for participating in the project.
 
 ## Code of Conduct
 
@@ -101,7 +101,7 @@ Simply submit a PR with your improvements.
 
 ### Specification Changes
 
-Proposing changes to the USAGE specification itself?
+Proposing changes to the USAGIX specification itself?
 
 1. **Understand the scope**: Is this a clarification (PATCH), addition (MINOR), or breaking change (MAJOR)?
 2. **Get feedback**: Open an issue first to discuss the change
@@ -220,7 +220,7 @@ How was this change tested? (link to conformance tests, etc.)
 
 ## Licensing & IP
 
-By contributing to USAGE, you agree to:
+By contributing to USAGIX, you agree to:
 
 1. **License Your Work**: Contributions are licensed under Apache 2.0 (see [LICENSING.md](LICENSING.md))
 2. **Sign DCO**: All commits must be signed with `git commit -s` (Developer Certificate of Origin)
@@ -243,7 +243,7 @@ See [LICENSING.md](LICENSING.md) for full details.
 
 ## Recognition
 
-Contributors to USAGE are recognized in:
+Contributors to USAGIX are recognized in:
 1. **Commit history**: All PR merges are in git history
 2. **Release notes**: Major contributors listed in release announcements
 3. **Contributors page**: TBD (contributors.md or GitHub contributors)
@@ -269,4 +269,4 @@ All reports are treated confidentially and investigated promptly.
 
 ---
 
-**Thank you for contributing to making USAGE a better specification!**
+**Thank you for contributing to making USAGIX a better specification!**
