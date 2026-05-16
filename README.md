@@ -15,6 +15,22 @@ Current agent deployments exhibit five systemic failures:
 
 USAGE addresses these failures by defining an operating substrate contract instead of another application framework.
 
+## Definitive Scope Trigger
+USAGE uses an operational binary for classification. A workload is classified as an AI Agent under USAGE when both are true:
+- Inference Core Invocation: it invokes one or more foundation model or LLM calls to determine state or control flow.
+- Peripheral Access Capabilities: it can invoke external tools, databases, web APIs, or native host system calls.
+
+This rule applies to scripts, binaries, background services, and active workload threads regardless of complexity.
+
+## Absolute Boundary Condition
+No exemptions are granted based on implementation size or framework choice. Once the scope trigger is satisfied, the workload is inside the USAGE runtime boundary and MUST:
+- Relinquish direct external side-effect pathways outside substrate mediation.
+- Authenticate through a distinct cryptographically verifiable workload identity.
+- Route all external actions through substrate tool-proxy enforcement.
+- Submit to real-time token accounting and quota enforcement.
+
+Substrate non-compliance handling is terminal (`SIG_AGENT_TERMINATE`).
+
 ## Design Principles
 - Zero Trust by Default
 - Governance Outside the Trust Boundary
