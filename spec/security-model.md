@@ -130,7 +130,7 @@ USAGIX defines four trust domains with explicit boundaries:
     ↓ mediated calls    ↓ governance decisions
 ```
 
-**Implementation Note**: See `reference/myelin-ax/ARCHITECTURE.md` for a concrete Kubernetes-based implementation.
+**Implementation Note**: See [Myelin-AX ARCHITECTURE.md](https://github.com/shivashankartummala/myelin-ax/blob/main/ARCHITECTURE.md) for a concrete Kubernetes-based implementation.
 
 ### 2.3 Domain C: Isolated Tool Executors (Sandboxes)
 

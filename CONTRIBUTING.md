@@ -120,9 +120,12 @@ Proposing changes to the USAGIX specification itself?
 
 ### Implementation & Reference Code
 
-Contributing a reference implementation or improving Myelin-AX?
+Contributing to a reference implementation (e.g., Myelin-AX for Kubernetes)?
 
-See [reference/myelin-ax/CONTRIBUTING.md](reference/myelin-ax/CONTRIBUTING.md) (TBD) for implementation-specific guidelines.
+The reference implementations are maintained as separate projects to preserve the substrate-agnostic nature of this specification. See the relevant implementation repository:
+
+- **[Myelin-AX (Kubernetes)](https://github.com/shivashankartummala/myelin-ax)** — For Kubernetes-specific contributions
+- **[USAGIX Specification](https://github.com/shivashankartummala/usagix-spec)** — For spec changes that affect all implementations
 
 ---
 
@@ -252,8 +255,10 @@ Contributors to USAGIX are recognized in:
 
 ## Getting Help
 
-- **Spec questions**: Open a GitHub discussion or issue
-- **Implementation questions**: See [reference/myelin-ax/](reference/myelin-ax/) or ask in issues
+- **Spec questions**: Open a GitHub discussion or issue in [usagix-spec](https://github.com/shivashankartummala/usagix-spec)
+- **Implementation questions**: Ask in the relevant reference implementation repository:
+  - Kubernetes: [myelin-ax](https://github.com/shivashankartummala/myelin-ax)
+  - Other substrates: Check [ADOPTERS.md](ADOPTERS.md) for links to other implementations
 - **Process questions**: See [GOVERNANCE.md](GOVERNANCE.md)
 - **Quick chat**: Join CNCF Slack #usage channel (TBD)
 

@@ -24,7 +24,8 @@ If you're implementing USAGIX or using a USAGIX-compliant substrate, please subm
 - **Focus**: Kubernetes pods with sidecar governance (agent-brain + myelin-proxy)
 - **USAGIX Version**: v1.0.0
 - **Status**: Stable
-- **Repository**: [github.com/shivashankartummala/usage-spec](https://github.com/shivashankartummala/usage-spec) (reference/myelin-ax/)
+- **Repository**: [github.com/shivashankartummala/myelin-ax](https://github.com/shivashankartummala/myelin-ax)
+- **Documentation**: [Myelin-AX README](https://github.com/shivashankartummala/myelin-ax/blob/main/README.md)
 - **Contact**: governance@usage-spec.io
 
 ---

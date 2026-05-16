@@ -195,58 +195,25 @@ USAGIX follows eight core principles:
 
 ## Reference Implementation: Myelin-AX
 
-**Myelin-AX** is a Kubernetes-native reference implementation of USAGIX. It uses Kubernetes CRDs, an operator, and sidecar-based governance to enforce zero-trust execution for agents.
+**Myelin-AX** is the official Kubernetes-native reference implementation of USAGIX. It demonstrates how the substrate-agnostic USAGIX protocol can be realized on Kubernetes using CRDs, sidecar containers, and gVisor/Firecracker sandboxing.
 
-### Hello World: Agent Manifest
+**The Myelin-AX reference implementation is maintained in a [separate repository](https://github.com/shivashankartummala/myelin-ax) to preserve the substrate-agnostic nature of the USAGIX specification.** This separation ensures that:
 
-Here's a minimal USAGIX agent (Mantle ecosystem format):
+- **USAGIX remains a universal standard** not tied to any single substrate
+- **Implementers can choose different substrates** (Kubernetes, serverless, WASM, VMs) without dependencies on Kubernetes-specific code
+- **Reference implementation updates** don't affect the specification versioning
 
-```yaml
-apiVersion: mantle.sh/v1alpha1
-kind: SovereignAgent
+### Getting Started with Myelin-AX
 
-metadata:
-  name: research-assistant
-  labels:
-    team: research
-    environment: production
+For Kubernetes-specific deployment, architecture, examples, and implementation patterns, visit:
 
-spec:
-  runtime:
-    profile: standard
-    maxTokensQuota: 10000000      # 10M tokens per session
-    sessionTimeoutSeconds: 3600   # 1 hour timeout
+**[github.com/shivashankartummala/myelin-ax](https://github.com/shivashankartummala/myelin-ax)**
 
-  security:
-    sandboxLevel: moderate         # Balanced isolation
-    allowedTools:
-      - web.search
-      - database.query
-      - file.read
-
-  memory:
-    l1ContextWindow: 100000        # 100K token context
-    l2CacheProvider: "redis://cache.internal:6379"
-    l3ColdStorageProvider: "s3://agents/sessions"
-
-  identity:
-    modelId: claude-3.5-sonnet
-    systemPrompt: |
-      You are a research assistant. Strengths: retrieval, synthesis, clarity.
-      Constraints: cite sources; do not make up data.
-```
-
-### How USAGIX and Myelin-AX Relate
-
-| Concept | USAGIX (Spec) | Myelin-AX (Implementation) |
-|---------|---------------|---------------------------|
-| Agent Container | Cognitive Container (abstract) | Kubernetes Pod with agent-brain container |
-| Governance | Governance Enforcement Plane (abstract) | myelin-proxy sidecar + OPA |
-| Tool Execution | Tool Executor (abstract) | myelin-sandbox container with gVisor |
-| Memory Tiers | L1/L2/L3 (abstract paging) | In-memory + Redis + S3 |
-| Identity & Auth | Cryptographic workload identity | Kubernetes ServiceAccount + mTLS |
-
-For Kubernetes-specific details, see [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md).
+The Myelin-AX repository includes:
+- Kubernetes CRD examples and deployment manifests
+- Pod architecture diagrams (trust domain separation visualization)
+- OPA policy examples for governance enforcement
+- Complete architectural documentation mapping USAGIX concepts to Kubernetes primitives
 
 ---
 
@@ -260,9 +227,11 @@ For Kubernetes-specific details, see [reference/myelin-ax/ARCHITECTURE.md](refer
 
 ### Reference Implementation & Deployment
 
-- **[reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md)** — Myelin-AX design and USAGIX mapping
-- **[reference/myelin-ax/deployment/](reference/myelin-ax/deployment/)** — Kubernetes manifests and deployment examples
-- **[reference/myelin-ax/policies/](reference/myelin-ax/policies/)** — Example OPA governance policies
+The official Kubernetes-native reference implementation is maintained separately in the **[Myelin-AX repository](https://github.com/shivashankartummala/myelin-ax)**:
+
+- **Architecture & Design** — Kubernetes-specific implementation patterns and USAGIX mapping
+- **Deployment Examples** — Kubernetes manifests, CRDs, and deployment guides
+- **Governance Policies** — Example OPA policy configurations for USAGIX compliance
 
 ### Specifications & Architecture
 
@@ -320,13 +289,13 @@ For Kubernetes-specific details, see [reference/myelin-ax/ARCHITECTURE.md](refer
 3. Review [design principles](#design-principles) and [architecture overview](#architecture-overview)
 
 ### For Implementers
-1. Start with [Myelin-AX ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) to understand how USAGIX maps to Kubernetes
+1. Study the [Core Concepts table](#core-concepts--specifications) and relevant RFCs (start with RFC-0005 for ASI protocol)
 2. Review [RFC-0005 (ASI System Calls)](RFC/rfc-0005-asi-system-calls.md) for gRPC contract details
-3. Examine [reference/myelin-ax/deployment/](reference/myelin-ax/deployment/) for example manifests
+3. See [Myelin-AX repository](https://github.com/shivashankartummala/myelin-ax) for a complete Kubernetes-native reference implementation
 
 ### For Adopters & Users
-1. Review the [Hello World manifest](#hello-world-agent-manifest) above
-2. Explore [reference/myelin-ax/policies/](reference/myelin-ax/policies/) for governance policy examples
+1. Review [Myelin-AX README](https://github.com/shivashankartummala/myelin-ax) for Kubernetes-based deployment examples
+2. Study the Mantle ecosystem specification in the [Core Concepts](#core-concepts--specifications) section
 3. See [ADOPTERS.md](ADOPTERS.md) for organizations using USAGIX and deployment patterns
 
 ### For Contributors

@@ -18,7 +18,7 @@ derivative works and translations.
 
 ## Reference Implementation License
 
-All reference implementations (in `reference/myelin-ax/`, code examples, and supplementary code) 
+All reference implementations (maintained in separate repositories, e.g., [Myelin-AX](https://github.com/shivashankartummala/myelin-ax)) 
 are licensed under the **Apache License 2.0**.
 
 ## Intellectual Property and Patent Grant

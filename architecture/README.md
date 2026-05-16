@@ -6,10 +6,12 @@ This directory contains architecture documentation, diagrams, and design rationa
 
 ### Architectural Diagrams
 Available in [../diagrams/](../diagrams/):
-- **[protocol-stack.mmd](../diagrams/usage-protocol-stack.mmd)** — USAGIX protocol stack layers
+- **[protocol-stack.mmd](../diagrams/usage-protocol-stack.mmd)** — USAGIX protocol stack layers (L1-L4)
 - **[agent-lifecycle.mmd](../diagrams/usage-lifecycle-state-machine.mmd)** — Agent runtime state machine
-- **[pod-topography.mmd](../diagrams/myelin-ax-pod-topography.mmd)** — Myelin-AX Kubernetes architecture
-- **[tool-execution.mmd](../diagrams/usage-tool-execution-sequence.mmd)** — Tool execution sequence
+- **[tool-execution.mmd](../diagrams/usage-tool-execution-sequence.mmd)** — Tool execution sequence diagram
+
+**Substrate-Specific Diagrams**:
+- **[Myelin-AX Pod Topography](https://github.com/shivashankartummala/myelin-ax/blob/main/diagrams/myelin-ax-pod-topography.mmd)** — Kubernetes pod architecture (in myelin-ax repository)
 
 ### Detailed Specifications
 Core architecture documents available in [../spec/](../spec/) and [../RFC/](../RFC/):
@@ -135,7 +137,7 @@ Agents benefit from all three tiers without managing the complexity.
 
 ## Reference Implementation Mappings
 
-See [../reference/myelin-ax/ARCHITECTURE.md](../reference/myelin-ax/ARCHITECTURE.md) for how abstract USAGIX concepts map to Kubernetes primitives:
+See the [Myelin-AX repository](https://github.com/shivashankartummala/myelin-ax/blob/main/ARCHITECTURE.md) for how abstract USAGIX concepts map to Kubernetes primitives:
 
 - **Cognitive Container** → Kubernetes pod with LLM runtime sidecar
 - **Governance Enforcement Plane** → Kubernetes pod with myelin-proxy sidecar
@@ -143,37 +145,28 @@ See [../reference/myelin-ax/ARCHITECTURE.md](../reference/myelin-ax/ARCHITECTURE
 - **Immutable Audit Logging** → CloudTrail or GKE audit logs
 - **Memory Management** → Kubernetes PVC for persistent checkpoints
 
-## Design Document Index
-
-| Document | Focus | Audience |
-|----------|-------|----------|
-| [trust-domains.md](documents/trust-domains.md) | Security model and trust boundaries | Security engineers, implementers |
-| [protocol-stack.md](documents/protocol-stack.md) | ASI gRPC protocol design | Implementers, protocol designers |
-| [memory-model.md](documents/memory-model.md) | Memory virtualization strategy | Implementers, architects |
-| [capability-system.md](documents/capability-system.md) | Capability-based access control | Security engineers, policy authors |
-| [governance-engine.md](documents/governance-engine.md) | Policy evaluation and decisions | Policy authors, operators |
-
 ---
 
 ## For Different Roles
 
 ### Substrate Implementers
-1. Read this README for overview
-2. Study [documents/trust-domains.md](documents/trust-domains.md) for security requirements
-3. Review [documents/protocol-stack.md](documents/protocol-stack.md) for protocol details
-4. Reference [../reference/myelin-ax/ARCHITECTURE.md](../reference/myelin-ax/ARCHITECTURE.md) for implementation patterns
+1. Read this README for high-level overview
+2. Review [RFC-0001](../RFC/rfc-0001-usagix-core.md) for core architecture and trust domains
+3. Study [RFC-0005](../RFC/rfc-0005-asi-system-calls.md) for ASI gRPC protocol contract details
+4. Review [RFC-0006](../RFC/rfc-0006-security-model.md) for security requirements
+5. Reference [Myelin-AX](https://github.com/shivashankartummala/myelin-ax) for a complete Kubernetes implementation reference
 
 ### Security Engineers
-1. Start with [documents/trust-domains.md](documents/trust-domains.md)
-2. Review [../spec/security-model.md](../spec/security-model.md) for threat analysis
-3. Check [documents/capability-system.md](documents/capability-system.md) for access control design
-4. See [../SECURITY.md](../SECURITY.md) for security requirements
+1. Start with [RFC-0006: Security Model](../RFC/rfc-0006-security-model.md) for threat analysis and mitigations
+2. Review [../spec/security-model.md](../spec/security-model.md) for detailed security model
+3. Check [RFC-0004: Governance Model](../RFC/rfc-0004-governance-model.md) for capability-based access control design
+4. See [../SECURITY.md](../SECURITY.md) for additional security requirements
 
 ### Architects & Designers
-1. This README for high-level overview
-2. Review diagrams in [diagrams/](diagrams/) for visual understanding
-3. Deep dive into individual architecture documents as needed
-4. Compare with [../reference/myelin-ax/ARCHITECTURE.md](../reference/myelin-ax/ARCHITECTURE.md)
+1. Review this README for high-level architecture overview
+2. Study the [Architectural Diagrams](#architectural-diagrams) section for visual understanding
+3. Deep dive into relevant RFCs based on your focus area
+4. Reference [Myelin-AX ARCHITECTURE.md](https://github.com/shivashankartummala/myelin-ax/blob/main/ARCHITECTURE.md) for Kubernetes-specific implementation patterns
 
 ---
 

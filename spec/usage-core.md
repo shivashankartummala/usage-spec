@@ -238,7 +238,7 @@ and Governance Enforcement Plane run in separate trust domains (e.g., separate c
 Cognitive Container cannot directly reach external network (no egress). All external access routes through 
 Governance Enforcement Plane, which enforces USAGIX constraints.
 
-**Implementation Note**: See `reference/myelin-ax/ARCHITECTURE.md` for a concrete Kubernetes implementation 
+**Implementation Note**: See [Myelin-AX ARCHITECTURE.md](https://github.com/shivashankartummala/myelin-ax/blob/main/ARCHITECTURE.md) for a concrete Kubernetes implementation 
 using sidecar containers.
 
 ### 14.2 Checkpoint Implementation
