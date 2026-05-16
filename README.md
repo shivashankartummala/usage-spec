@@ -6,11 +6,19 @@ USAGE is an open interface specification for executing autonomous agent processe
 Myelin-AX is the Kubernetes-native reference implementation of USAGE. It uses CRDs, an operator, mutating admission, and sidecar-based governance to enforce zero-trust execution semantics for agent processes.
 
 ## The Case for an Agent OS
+<details>
+<summary>Expand The Case for an Agent OS</summary>
+
 USAGE addresses not only technical orchestration but also enterprise governance and liability requirements for autonomous digital workers.
 
 See: [case-for-agent-os.md](spec/case-for-agent-os.md)
 
+</details>
+
 ## Problem Statement
+<details>
+<summary>Expand Problem Statement</summary>
+
 Current agent deployments exhibit five systemic failures:
 - Security paradox: high-privilege agents with weak containment and broad network reach.
 - Token-resource mismatch: schedulers reason about CPU/RAM while real bottlenecks are tokens, context windows, and provider quotas.
@@ -20,14 +28,24 @@ Current agent deployments exhibit five systemic failures:
 
 USAGE addresses these failures by defining an operating substrate contract instead of another application framework.
 
+</details>
+
 ## Definitive Scope Trigger
+<details>
+<summary>Expand Definitive Scope Trigger</summary>
+
 USAGE uses an operational binary for classification. A workload is classified as an AI Agent under USAGE when both are true:
 - Inference Core Invocation: it invokes one or more foundation model or LLM calls to determine state or control flow.
 - Peripheral Access Capabilities: it can invoke external tools, databases, web APIs, or native host system calls.
 
 This rule applies to scripts, binaries, background services, and active workload threads regardless of complexity.
 
+</details>
+
 ## Absolute Boundary Condition
+<details>
+<summary>Expand Absolute Boundary Condition</summary>
+
 No exemptions are granted based on implementation size or framework choice. Once the scope trigger is satisfied, the workload is inside the USAGE runtime boundary and MUST:
 - Relinquish direct external side-effect pathways outside substrate mediation.
 - Authenticate through a distinct cryptographically verifiable workload identity.
@@ -36,7 +54,12 @@ No exemptions are granted based on implementation size or framework choice. Once
 
 Substrate non-compliance handling is terminal (`SIG_AGENT_TERMINATE`).
 
+</details>
+
 ## Design Principles
+<details>
+<summary>Expand Design Principles</summary>
+
 - Zero Trust by Default
 - Governance Outside the Trust Boundary
 - Tool Calls as System Calls
@@ -46,7 +69,12 @@ Substrate non-compliance handling is terminal (`SIG_AGENT_TERMINATE`).
 - Deterministic Lifecycle Management
 - Portable Agent Substrates
 
+</details>
+
 ## Protocol Stack
+<details>
+<summary>Expand Protocol Stack</summary>
+
 USAGE specifies a four-layer stack:
 - Layer 4: Cognitive Application Layer
 - Layer 3: Governance and Aspect Layer
@@ -55,7 +83,12 @@ USAGE specifies a four-layer stack:
 
 Detailed specification: [usage-core.md](spec/usage-core.md)
 
+</details>
+
 ## Runtime Architecture
+<details>
+<summary>Expand Runtime Architecture</summary>
+
 Myelin-AX enforces USAGE through out-of-process supervision:
 - `agent-brain`: untrusted cognition container.
 - `myelin-proxy`: privileged governance sidecar implementing ASI server.
@@ -63,7 +96,12 @@ Myelin-AX enforces USAGE through out-of-process supervision:
 
 Kubernetes topology and flow diagrams: [kubernetes-architecture.md](spec/kubernetes-architecture.md)
 
+</details>
+
 ## System Calls (ASI)
+<details>
+<summary>Expand System Calls (ASI)</summary>
+
 USAGE defines the Agent Substrate Interface over gRPC:
 - `UsageSpawn`
 - `UsageYield`
@@ -75,34 +113,69 @@ Formal contracts: [asi.proto](proto/usage/v1/asi.proto)
 
 System-call semantics: [asi-system-calls.md](spec/asi-system-calls.md)
 
+</details>
+
 ## Security Model
+<details>
+<summary>Expand Security Model</summary>
+
 Security boundaries and mandatory controls are defined in:
 - [security-model.md](spec/security-model.md)
 - [threat-model.md](spec/threat-model.md)
 
+</details>
+
 ## Memory Model
+<details>
+<summary>Expand Memory Model</summary>
+
 USAGE defines hierarchical memory tiers (L1/L2/L3), eviction semantics, and page-out contracts:
 - [memory-model.md](spec/memory-model.md)
 
+</details>
+
 ## Scheduling Model
+<details>
+<summary>Expand Scheduling Model</summary>
+
 USAGE introduces inference-aware scheduling primitives (token budget classes, context pressure, provider quota backpressure):
 - [scheduling-model.md](spec/scheduling-model.md)
 
+</details>
+
 ## Governance Model
+<details>
+<summary>Expand Governance Model</summary>
+
 USAGE governance pipeline externalizes policy, redaction, retries, idempotency, and audit semantics:
 - [governance-model.md](spec/governance-model.md)
 
+</details>
+
 ## Multi-Agent Coordination Model
+<details>
+<summary>Expand Multi-Agent Coordination Model</summary>
+
 USAGE models supervised process trees, parent-child ownership, escalation, and deadlock handling:
 - [coordination-model.md](spec/coordination-model.md)
 
+</details>
+
 ## Kubernetes Integration
+<details>
+<summary>Expand Kubernetes Integration</summary>
+
 Reference CRDs and lifecycle mappings:
 - [sovereignagent.example.yaml](crds/sovereignagent.example.yaml)
 - [agentsession.example.yaml](crds/agentsession.example.yaml)
 - [rfc-001-lifecycle.md](spec/rfc-001-lifecycle.md)
 
+</details>
+
 ## Compliance Suite
+<details>
+<summary>Expand Compliance Suite</summary>
+
 USAGE conformance is profile-based:
 - Core ASI Conformance
 - Governance Conformance
@@ -113,16 +186,29 @@ Suite design and test matrix:
 - [compliance-suite.md](spec/compliance-suite.md)
 - [asi-compliance-tests.md](compliance-tests/asi-compliance-tests.md)
 
+</details>
+
 ## OpenTelemetry Semantic Conventions Proposal
+<details>
+<summary>Expand OpenTelemetry Semantic Conventions Proposal</summary>
+
 USAGE proposes agent-runtime semantic attributes and events:
 - [otel-semconv-proposal.md](spec/otel-semconv-proposal.md)
 
+</details>
+
 ## CNCF Positioning and Roadmap
+<details>
+<summary>Expand CNCF Positioning and Roadmap</summary>
+
 - CNCF standardization path: [cncf-positioning.md](spec/cncf-positioning.md)
 - Standards-track roadmap: [standardization-roadmap.md](spec/standardization-roadmap.md)
 
+</details>
 
 ## Architecture Diagrams
+<details>
+<summary>Expand Architecture Diagrams</summary>
 
 ### 1) USAGE Protocol Stack
 Source: [usage-protocol-stack.mmd](diagrams/usage-protocol-stack.mmd)
@@ -280,10 +366,17 @@ sequenceDiagram
   MP-->>AB: ToolResponse(safe_payload, metrics, status)
 ```
 
+</details>
+
 ## Appendix
+<details>
+<summary>Expand Appendix</summary>
+
 - Protobuf contracts: [asi.proto](proto/usage/v1/asi.proto)
 - JSON schema: [agent_manifest.schema.json](schemas/agent_manifest.schema.json)
 - Examples: [agent_manifest_basic.yaml](examples/agent_manifest_basic.yaml), [agent_manifest_advanced.yaml](examples/agent_manifest_advanced.yaml)
+
+</details>
 
 ## Status
 - Version: `v0.2-draft`
