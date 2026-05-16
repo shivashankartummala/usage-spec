@@ -1,466 +1,69 @@
-# USAGIX Protocol: Universal Substrate for Agent Governance, Isolation and eXecution
+# USAGIX: Universal Substrate for Agent Governance, Isolation and eXecution
 
-**Specification Version**: 1.0.0 | **Status**: Stable (candidate for open standard)  
-**Ecosystem**: Mantle | **API Version**: mantle.sh/v1alpha1
+> **🚀 Status**: `v0.2-draft` — Seeking RFC participants and early implementers  
+> **Ecosystem**: Mantle | **API Version**: `mantle.sh/v1alpha1` | **License**: Apache 2.0
+
+---
 
 ## What is USAGIX?
 
-USAGIX is an open interface specification for executing autonomous agent processes under strict substrate governance. It standardizes the boundary between cognitive workloads and execution substrates, analogous to the role of POSIX between applications and operating systems. USAGIX defines control-plane and data-plane contracts for lifecycle, signaling, memory paging, tool mediation, quota enforcement, and auditability.
+USAGIX is an open interface specification for executing autonomous agent processes under strict substrate governance. It standardizes the boundary between cognitive workloads (LLM inference) and execution substrates, analogous to the role of POSIX between applications and operating systems.
 
-USAGIX is **substrate-agnostic**: a single USAGIX protocol implementation can run on Kubernetes substrates, serverless platforms, WASM runtimes, or traditional VMs. The spec defines the abstract trust-domain-separated architecture; each substrate implements the plumbing differently.
+USAGIX defines control-plane and data-plane contracts for:
+- **Lifecycle management** (spawn, yield, resume, signal, terminate)
+- **Memory virtualization** (L1/L2/L3 paging semantics)
+- **Tool mediation** (capability-based access control)
+- **Quota enforcement** (token budgets, rate limits)
+- **Auditability** (immutable decision logs)
 
-## Reference Implementation
+**Substrate-agnostic**: A single USAGIX implementation runs on Kubernetes, serverless platforms, WASM runtimes, or VMs. The spec defines abstract trust-domain architecture; each substrate implements the plumbing differently.
 
-**Myelin-AX** is a Kubernetes-native reference implementation of the USAGIX protocol. It uses CRDs, an operator, mutating admission, and sidecar-based governance to enforce zero-trust execution semantics for agent processes in the Mantle ecosystem. See [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) for Myelin-AX specific details.
+---
 
-## Governance & Legal
-
-- **License**: Apache 2.0 — see [LICENSING.md](LICENSING.md)
-- **Governance Model**: See [GOVERNANCE.md](GOVERNANCE.md)
-- **Code of Conduct**: See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
-- **Trademark Policy**: See [TRADEMARK_POLICY.md](TRADEMARK_POLICY.md)
-- **Versioning Policy**: See [spec/versioning.md](spec/versioning.md)
-
-## Documentation & Resources
-
-### For Specification & Community
-
-- **[ROADMAP.md](ROADMAP.md)** — Multi-year USAGIX protocol evolution plan (v1.0 stable → v2.0 breaking changes → CNCF graduation)
-- **[CHARTER.md](CHARTER.md)** — Project charter, mission, vision, and governance structure for the Mantle/USAGIX ecosystem
-- **[ADOPTERS.md](ADOPTERS.md)** — Organizations implementing or adopting USAGIX; contribution guidelines for adding implementations
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** — How to contribute to USAGIX (bug reports, RFCs, PRs, DCO signing)
-- **[SECURITY.md](SECURITY.md)** — USAGIX security guarantees, vulnerability disclosure, and security best practices
-
-### For Implementation & Development
-
-- **[docs/](docs/)** — Comprehensive documentation organized by role
-  - [docs/getting-started/](docs/getting-started/) — Quick-start guides by role
-  - [docs/implementation/](docs/implementation/) — Platform-specific implementation guides (Kubernetes, serverless, WASM, VM)
-  - [docs/compliance/](docs/compliance/) — Compliance profiles (HIPAA, PCI-DSS, SOC2, GDPR)
-  - [docs/api-reference/](docs/api-reference/) — ASI gRPC API and protobuf reference
-  - [docs/governance/](docs/governance/) — Policy schemas and governance documentation
-
-- **[architecture/](architecture/)** — Architecture documentation and design decisions
-  - [architecture/diagrams/](architecture/diagrams/) — System architecture diagrams
-  - [architecture/documents/](architecture/documents/) — Detailed architecture design documents
-
-- **[RFC/](RFC/)** — Request for Comments process and proposals
-  - [RFC/README.md](RFC/README.md) — RFC process and template
-  - [RFC/rfc-001-lifecycle.md](RFC/rfc-001-lifecycle.md) — Agent lifecycle specification (approved, v1.0)
-
-- **[spec/](spec/)** — Core specification documents
-  - [spec/usage-core.md](spec/usage-core.md) — Core architecture and trust domains
-  - [spec/security-model.md](spec/security-model.md) — Security guarantees and threat model
-  - [spec/memory-model.md](spec/memory-model.md) — Memory virtualization (L1/L2/L3)
-  - [spec/governance-model.md](spec/governance-model.md) — Governance and policy enforcement
-  - [spec/runtime-state-machine.md](spec/runtime-state-machine.md) — Agent lifecycle state machine
-  - [spec/asi-system-calls.md](spec/asi-system-calls.md) — Agent Substrate Interface system calls
-  - [spec/versioning.md](spec/versioning.md) — Versioning policy and backward compatibility
-
-### For Substrate Developers
-
-- **[reference/myelin-ax/](reference/myelin-ax/)** — Kubernetes-native reference implementation
-  - [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) — Myelin-AX design and mapping to USAGIX
-  - [reference/myelin-ax/deployment/](reference/myelin-ax/deployment/) — Kubernetes manifests and deployment examples
-  - [reference/myelin-ax/policies/](reference/myelin-ax/policies/) — Example governance policies
-
-## The Case for an Agent OS
-<details>
-<summary>Expand The Case for an Agent OS</summary>
-
-USAGIX addresses not only technical orchestration but also enterprise governance and liability requirements for autonomous digital workers.
-
-See: [case-for-agent-os.md](spec/case-for-agent-os.md)
-
-</details>
-
-## Problem Statement
-<details>
-<summary>Expand Problem Statement</summary>
+## Why USAGIX?
 
 Current agent deployments exhibit five systemic failures:
-- Security paradox: high-privilege agents with weak containment and broad network reach.
-- Token-resource mismatch: schedulers reason about CPU/RAM while real bottlenecks are tokens, context windows, and provider quotas.
-- Governance vacuum: policy, redaction, and budget logic duplicated in application code.
-- Agent memory wall: prompt growth, context degradation, and no explicit paging semantics.
-- Coordination chaos: recursive loops, orphaned subtasks, and undefined supervision semantics.
 
-USAGIX addresses these failures by defining an operating substrate contract instead of another application framework.
-
-</details>
-
-## Definitive Scope Trigger
-<details>
-<summary>Expand Definitive Scope Trigger</summary>
-
-USAGIX uses an operational binary for classification. A workload is classified as an AI Agent under USAGIX when both are true:
-- Inference Core Invocation: it invokes one or more foundation model or LLM calls to determine state or control flow.
-- Peripheral Access Capabilities: it can invoke external tools, databases, web APIs, or native host system calls.
-
-This rule applies to scripts, binaries, background services, and active workload threads regardless of complexity.
-
-</details>
-
-## Absolute Boundary Condition
-<details>
-<summary>Expand Absolute Boundary Condition</summary>
-
-No exemptions are granted based on implementation size or framework choice. Once the scope trigger is satisfied, the workload is inside the USAGIX runtime boundary and MUST:
-- Relinquish direct external side-effect pathways outside substrate mediation.
-- Authenticate through a distinct cryptographically verifiable workload identity.
-- Route all external actions through substrate tool-proxy enforcement.
-- Submit to real-time token accounting and quota enforcement.
-
-Substrate non-compliance handling is terminal (`SIG_AGENT_TERMINATE`).
-
-</details>
-
-## Design Principles
-<details>
-<summary>Expand Design Principles</summary>
-
-- Zero Trust by Default
-- Governance Outside the Trust Boundary
-- Tool Calls as System Calls
-- Tokens as Schedulable Resources
-- Context as Virtual Memory
-- Cognitive Workloads as Processes
-- Deterministic Lifecycle Management
-- Portable Agent Substrates
-
-</details>
-
-## Protocol Stack
-<details>
-<summary>Expand Protocol Stack</summary>
-
-USAGIX specifies a four-layer stack:
-- Layer 4: Cognitive Application Layer
-- Layer 3: Governance and Aspect Layer
-- Layer 2: Runtime and Execution Layer
-- Layer 1: Substrate Abstraction Layer (SAL)
-
-Detailed specification: [usage-core.md](spec/usage-core.md)
-
-</details>
-
-## Runtime Architecture
-
-USAGIX enforces strict trust-domain separation:
-- **Cognitive Container** (Untrusted): Agent process running LLM inference and user logic
-- **Governance Enforcement Plane** (Trusted): Mediation layer validating capabilities, enforcing policies, and auditing decisions
-- **Tool Executor** (Isolated): Sandboxed execution of external tools with per-tool isolation
-
-All external actions from the Cognitive Container route through the Governance Enforcement Plane for validation, logging, and constraint enforcement.
-
-**Implementation Note**: See [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) for a concrete Kubernetes-based implementation using sidecar containers.
-
-## System Calls (ASI)
-<details>
-<summary>Expand System Calls (ASI)</summary>
-
-USAGIX defines the Agent Substrate Interface over gRPC:
-- `UsagixSpawn`
-- `UsagixYield`
-- `UsagixSignal`
-- `UsagixMemPageOut`
-- `UsagixCallTool`
-
-Formal contracts: [asi.proto](proto/usage/v1/asi.proto)
-
-System-call semantics: [asi-system-calls.md](spec/asi-system-calls.md)
-
-</details>
-
-## Security Model
-
-Source: [security-model.md](spec/security-model.md)
-
-### Objectives
-- Constrain blast radius of compromised cognition workloads.
-- Prevent direct credential and network exfiltration.
-- Enforce policy on every side effect.
-
-### Mandatory Controls
-- Trust-domain-separated governance (out-of-process or equivalent).
-- Least-privilege tool capability allowlists.
-- Runtime sandboxing for dynamic code execution.
-- Immutable audit trail for all decisions.
-- Identity-bound quotas and policy snapshots.
-
-### Trust Domains
-- **Domain A**: Untrusted Cognitive Container (agent process)
-- **Domain B**: Trusted Governance Enforcement Plane (substrate mediation layer)
-- **Domain C**: Isolated Tool Executors (ephemeral sandbox)
-- **Domain D**: Control Plane (operators, policies, audit logs)
-
-### Security Invariants
-- Domain A cannot directly invoke Domain D or external networks.
-- All Domain A side effects MUST traverse Domain B for validation.
-- Domain C instances are ephemeral and isolated per tool execution.
-
-## Memory Model
-<details>
-<summary>Expand Memory Model</summary>
-
-Source: [memory-model.md](spec/memory-model.md)
-
-## Tiers
-- L1 Hot Context: model-visible active window.
-- L2 Warm Semantic Cache: low-latency retrieved context.
-- L3 Cold Persistent Store: long-term durable memory.
-
-## Page Semantics
-- Page Unit: opaque context segment with policy labels.
-- Page Metadata: `{page_id, hash, sensitivity, ttl, lineage}`.
-- `UsagixMemPageOut` demotes pages L1->L2/L3.
-
-## Invariants
-- Sensitive pages MUST carry policy labels across tiers.
-- Page references MUST be integrity-verifiable.
-- Expired pages MUST be unavailable to retrieval unless retention exception applies.
-
-## Memory Wall Handling
-- Trigger demotion by token pressure threshold.
-- Maintain retrieval quality via semantic compaction.
-- Avoid unbounded prompt growth by bounded L1 resident set.
-
-</details>
-
-## Scheduling Model
-<details>
-<summary>Expand Scheduling Model</summary>
-
-Source: [scheduling-model.md](spec/scheduling-model.md)
-
-## Problem
-CPU/RAM scheduling is insufficient for cognitive workloads that are quota-bound by tokens, context windows, and provider rate limits.
-
-## Scheduling Dimensions
-- Compute: CPU, memory, accelerator
-- Cognitive: token budget, token rate, context pressure
-- External: provider QPS/TPM, tool concurrency
-
-## Policies
-- Token Budget Class: `small`, `medium`, `large` with hard upper bounds.
-- Context Pressure Index (CPI): ratio of L1 occupancy to configured max.
-- Provider Backpressure State: normal, degraded, blocked.
-
-## Decisions
-- Admit when quotas and policy permit.
-- Preempt/terminate when token budget exhausted.
-- Force yield when CPI exceeds threshold.
-- Defer tool calls under provider backpressure.
-
-</details>
-
-## Governance Model
-<details>
-<summary>Expand Governance Model</summary>
-
-Source: [governance-model.md](spec/governance-model.md)
-
-## Pipeline
-1. Parse syscall request.
-2. Resolve identity and session policy snapshot.
-3. Run OPA policy evaluation.
-4. Apply redaction/scrubbing transforms.
-5. Enforce budget and concurrency guards.
-6. Execute or deny.
-7. Emit audit and telemetry records.
-
-## Idempotency
-- Tool calls SHOULD carry idempotency keys.
-- Retries MUST preserve policy context and audit correlation ids.
-
-## Audit
-Each decision MUST record:
-- session id
-- syscall
-- policy bundle version
-- allow/deny outcome
-- rationale code
-- latency and resource metrics
-
-</details>
-
-## Multi-Agent Coordination Model
-<details>
-<summary>Expand Multi-Agent Coordination Model</summary>
-
-Source: [coordination-model.md](spec/coordination-model.md)
-
-## Process Tree
-USAGIX models agent orchestration as a supervision tree.
-- Parent sessions own child sessions.
-- Ownership includes budget partitioning and termination semantics.
-
-## Spawn Semantics
-- Parent MAY allocate sub-budget to child at `UsagixSpawn`.
-- Child MUST inherit policy floor from parent; narrowing is allowed, widening is denied.
-
-## Failure Semantics
-- Child failure can be `isolated` or `escalating` based on parent policy.
-- Cascading termination behavior is explicit (`NONE`, `CHILDREN`, `SUBTREE`).
-
-## Deadlock and Loop Control
-- Maximum recursion depth MUST be bounded.
-- Repeated identical tool-call signatures SHOULD trigger circuit-breaker policy.
-
-</details>
-
-## Kubernetes Implementation (Myelin-AX)
-
-For Kubernetes-specific implementation details, CRDs, and deployment examples:
-- See [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) for system design
-- See [reference/myelin-ax/deployment/](reference/myelin-ax/deployment/) for Kubernetes manifests
-- See [reference/myelin-ax/policies/](reference/myelin-ax/policies/) for policy examples
-
-## Compliance Suite
-<details>
-<summary>Expand Compliance Suite</summary>
-
-Source: [compliance-suite.md](spec/compliance-suite.md)
-
-## Profiles
-- Core Profile: ASI syscall semantics and lifecycle state machine.
-- Governance Profile: policy enforcement, redaction, idempotency.
-- Isolation Profile: network isolation and sandbox integrity.
-- Observability Profile: required events, attributes, and traces.
-
-## Test Categories
-- Protocol tests: request/response compatibility and error codes.
-- Behavioral tests: legal/illegal state transitions.
-- Security tests: deny-path guarantees and boundary bypass attempts.
-- Performance tests: control-plane overhead and signal latency.
-
-## Pass Criteria
-Implementation is compliant when all mandatory tests pass for declared profile.
-
-</details>
-
-## OpenTelemetry Semantic Conventions Proposal
-<details>
-<summary>Expand OpenTelemetry Semantic Conventions Proposal</summary>
-
-Source: [otel-semconv-proposal.md](spec/otel-semconv-proposal.md)
-
-## Scope
-Defines telemetry attributes and events for USAGIX substrates.
-
-## Resource Attributes
-- `usage.substrate.name`
-- `usage.substrate.version`
-- `usage.session.id`
-- `usage.agent.blueprint`
-
-## Span Attributes
-- `usage.syscall.name`
-- `usage.syscall.result`
-- `usage.policy.decision`
-- `usage.policy.bundle.version`
-- `usage.token.consumed`
-- `usage.token.remaining`
-- `usage.memory.tier.target`
-- `usage.tool.name`
-
-## Events
-- `usage.state.transition`
-- `usage.signal.delivered`
-- `usage.pageout.completed`
-- `usage.tool.denied`
-- `usage.quota.exhausted`
-
-## Metric Suggestions
-- `usage_syscall_latency_ms`
-- `usage_policy_denials_total`
-- `usage_tokens_consumed_total`
-- `usage_active_sessions`
-- `usage_pageout_operations_total`
-
-</details>
-
-## CNCF Positioning and Roadmap
-<details>
-<summary>Expand CNCF Positioning and Roadmap</summary>
-
-- CNCF standardization path: [cncf-positioning.md](spec/cncf-positioning.md)
-- Standards-track roadmap: [standardization-roadmap.md](spec/standardization-roadmap.md)
-
-</details>
-
-## Threat Model
-<details>
-<summary>Expand Threat Model</summary>
-
-Source: [threat-model.md](spec/threat-model.md)
-
-## Threat Classes
-- Prompt injection
-- Tool hijacking
-- Credential exfiltration
-- Lateral movement
-- Sandbox escape
-- Poisoned retrieval memory
-- Recursive execution loops
-- Denial-of-wallet
-- Covert prompt exfiltration
-
-## STRIDE Mapping (Summary)
-- Spoofing: forged session or tool identity
-- Tampering: checkpoint/page mutation
-- Repudiation: missing immutable audit records
-- Information Disclosure: secret leakage via outputs/tools
-- Denial of Service: token or tool saturation
-- Elevation of Privilege: bypassing tool/policy boundary
-
-## Mitigation Matrix
-- Prompt injection -> policy-typed tool arguments + deny-by-default tool scopes
-- Tool hijacking -> signed tool registry + strict name/version pinning
-- Credential exfiltration -> no static creds in cognition domain, proxy-issued ephemeral credentials
-- Lateral movement -> egress-deny network policy and namespace segmentation
-- Sandbox escape -> hardened runtimeclass, seccomp, read-only FS
-- Denial-of-wallet -> token budgets, recursion limits, per-session circuit breakers
-- Recursive loops -> supervision depth limits and mandatory yield checkpoints
-
-</details>
-
-## ASI Compliance Tests
-<details>
-<summary>Expand ASI Compliance Tests</summary>
-
-Source: [asi-compliance-tests.md](compliance-tests/asi-compliance-tests.md)
-
-## Core Lifecycle
-- Spawn returns `PENDING`.
-- Illegal transitions are rejected.
-- Terminated sessions reject further syscalls.
-
-## Syscall Behavior
-- `UsagixSignal` idempotency by `(session_id, sequence)`.
-- `UsagixCallTool` deny path includes policy decision metadata.
-- `UsagixMemPageOut` returns integrity-reference per page.
-
-## Governance
-- Capability violation yields `PERMISSION_DENIED`.
-- Token exhaustion yields terminal state and `RESOURCE_EXHAUSTED` semantics.
-
-## Isolation
-- Attempted direct egress from cognition container fails.
-- Dynamic code execution occurs only in sandbox profile.
-
-## Observability
-- Required state-transition events emitted.
-- Required attributes present on syscall spans.
-
-</details>
-
-## Architecture Diagrams
-<details>
-<summary>Expand Architecture Diagrams</summary>
-
-### 1) USAGIX Protocol Stack
-Source: [usage-protocol-stack.mmd](diagrams/usage-protocol-stack.mmd)
+### The Problem
+- **Security Paradox**: High-privilege agents with weak containment and broad network reach
+- **Token-Resource Mismatch**: Schedulers reason about CPU/RAM while real bottlenecks are tokens, context windows, and provider quotas
+- **Governance Vacuum**: Policy, redaction, and budget logic duplicated in application code instead of the substrate
+- **Agent Memory Wall**: Prompt growth, context degradation, and no explicit paging semantics for managing context lifecycle
+- **Coordination Chaos**: Recursive loops, orphaned subtasks, and undefined supervision semantics for multi-agent workflows
+
+### The Vision
+USAGIX addresses these failures by defining an **operating substrate contract** for agents—not another application framework. It enables enterprises to:
+
+- **Enforce security** through trust-domain separation: untrusted agent code cannot bypass governance
+- **Predict resource consumption** by reasoning about tokens, not CPU cycles
+- **Simplify compliance** with built-in policy evaluation, redaction, and audit trails
+- **Manage complexity** of multi-agent orchestration with deterministic lifecycle and failure semantics
+- **Deploy portably** using a single agent manifest across Kubernetes, serverless, WASM, and VM substrates
+
+---
+
+## Architecture Overview
+
+### Trust Domain Separation
+
+USAGIX enforces strict isolation with three trust boundaries:
+
+```
+┌─────────────────────────────────────┐
+│ Cognitive Container (Untrusted)     │ ← Agent process, LLM inference
+├─────────────────────────────────────┤
+│ gRPC (Agent Substrate Interface)    │
+├─────────────────────────────────────┤
+│ Governance Enforcement Plane        │ ← Mediation layer (trusted)
+│ (Policy, Capability, Audit)         │
+├─────────────────────────────────────┤
+│ Tool Executors & Substrate          │ ← Kubernetes, serverless, VMs
+└─────────────────────────────────────┘
+```
+
+All external actions from the Cognitive Container route through the Governance Enforcement Plane for validation, logging, and constraint enforcement. The agent **cannot** bypass governance.
+
+### USAGIX Protocol Stack
 
 ```mermaid
 graph TD
@@ -517,40 +120,7 @@ graph TD
   class L1V,L1D,L1K layer1;
 ```
 
-### 2) Myelin-AX Kubernetes Pod Topography
-Source: [myelin-ax-pod-topography.mmd](diagrams/myelin-ax-pod-topography.mmd)
-
-```mermaid
-graph LR
-  subgraph POD["Kubernetes Pod (The Myelin Sheath)"]
-    subgraph AB["Container: agent-brain (User Space)"]
-      AB1["Runs Unprivileged"]
-      AB2["No Egress Network Access"]
-    end
-
-    subgraph MP["Container: myelin-proxy (Kernel Space / Sidecar)"]
-      MP1["USAGIX gRPC Server"]
-      MP2["Governance Enforcement"]
-    end
-
-    subgraph SB["Container: myelin-sandbox (Ephemeral Tool Worker)"]
-      SB1["Zero-Trust Tool Execution"]
-      SB2["RuntimeClass: gvisor / firecracker"]
-    end
-
-    AB1 <--> |"localhost:50051 (gRPC System Calls)"| MP1
-    MP2 -->|"Control Link: Spawn / Reap Tool Task"| SB1
-  end
-
-  LLM["External LLM Providers"]
-  OPA["Central OPA Gatekeeper Engine"]
-
-  MP2 -->|"Policy-Mediated Egress"| LLM
-  MP2 -->|"ValidateAction / Policy Decisions"| OPA
-```
-
-### 3) USAGIX Process Lifecycle State Machine
-Source: [usage-lifecycle-state-machine.mmd](diagrams/usage-lifecycle-state-machine.mmd)
+### Agent Lifecycle State Machine
 
 ```mermaid
 stateDiagram-v2
@@ -591,43 +161,187 @@ stateDiagram-v2
   }
 ```
 
-### 4) UML System Call Sequence (Tool Execution Flow)
-Source: [usage-tool-execution-sequence.mmd](diagrams/usage-tool-execution-sequence.mmd)
+---
 
-```mermaid
-sequenceDiagram
-  participant AB as Agent Brain (User Space)
-  participant MP as Myelin Proxy (Sidecar Kernel)
-  participant PE as Policy Engine (OPA / Gatekeeper)
-  participant SD as Sandboxed Tool Driver
+## Core Concepts & Specifications
 
-  AB->>MP: UsagixCallTool(tool_name, json_args)
-  Note right of MP: Pause brain thread and lock session context
-  MP->>PE: ValidateAction(payload)
-  PE-->>MP: AccessGranted: True
+USAGIX defines formal contracts for agent governance. The core specification consists of:
 
-  Note right of MP: Apply regex scrubbing for PII and secrets
-  MP->>SD: ExecuteTool(clean_payload)
-  Note right of SD: Execute inside RuntimeClass isolation (gVisor)
-  SD-->>MP: raw_stdout_string
+| Concept | Purpose | Learn More |
+|---------|---------|-----------|
+| **Core Architecture** | Trust domains, semantic types, and foundational contracts | [RFC-0001](RFC/rfc-0001-usagix-core.md) |
+| **Agent Lifecycle** | Session state machine, spawn/terminate contracts, checkpoint/restore | [RFC-0002](RFC/rfc-0002-agent-lifecycle.md) |
+| **Memory Model** | L1/L2/L3 paging, context pressure index, memory virtualization | [RFC-0003](RFC/rfc-0003-memory-model.md) |
+| **Governance Model** | Policy evaluation (OPA), capability ledger, audit trail, output redaction | [RFC-0004](RFC/rfc-0004-governance-model.md) |
+| **ASI System Calls** | 10 gRPC system calls for agent-substrate communication | [RFC-0005](RFC/rfc-0005-asi-system-calls.md) |
+| **Security Model** | Threat model (STRIDE), isolation guarantees, cryptographic signing | [RFC-0006](RFC/rfc-0006-security-model.md) |
+| **Inference Scheduler** | Token burn rate prediction, context pressure, rate limit enforcement | [RFC-0007](RFC/rfc-0007-inference-scheduler.md) |
+| **Multi-Agent Coordination** | Process trees, budget partitioning, failure cascade, deadlock prevention | [RFC-0008](RFC/rfc-0008-multi-agent-coordination.md) |
 
-  Note right of MP: Compute token/resource metrics\nand persist context metadata
-  MP-->>AB: ToolResponse(safe_payload, metrics, status)
+### Design Principles
+
+USAGIX follows eight core principles:
+
+- **Zero Trust by Default** — Agents cannot bypass governance through prompt injection or logic exploits
+- **Governance Outside the Trust Boundary** — Policy decisions made by untrusted code are invalid; only substrate enforcement counts
+- **Tool Calls as System Calls** — Agent tool invocations are system calls, mediated by the substrate and auditable
+- **Tokens as Schedulable Resources** — Tokens, not CPU cycles, are the primary scheduling dimension for cognitive workloads
+- **Context as Virtual Memory** — Context management is analogous to OS virtual memory: transparent paging, tier management, pressure feedback
+- **Cognitive Workloads as Processes** — Agents are stateful processes with lifecycle, identity, and resource quotas
+- **Deterministic Lifecycle Management** — State transitions are deterministic; identical inputs produce identical outcomes
+- **Portable Agent Substrates** — A single agent manifest runs on Kubernetes, serverless, WASM, and VMs
+
+---
+
+## Reference Implementation: Myelin-AX
+
+**Myelin-AX** is a Kubernetes-native reference implementation of USAGIX. It uses Kubernetes CRDs, an operator, and sidecar-based governance to enforce zero-trust execution for agents.
+
+### Hello World: Agent Manifest
+
+Here's a minimal USAGIX agent (Mantle ecosystem format):
+
+```yaml
+apiVersion: mantle.sh/v1alpha1
+kind: SovereignAgent
+
+metadata:
+  name: research-assistant
+  labels:
+    team: research
+    environment: production
+
+spec:
+  runtime:
+    profile: standard
+    maxTokensQuota: 10000000      # 10M tokens per session
+    sessionTimeoutSeconds: 3600   # 1 hour timeout
+
+  security:
+    sandboxLevel: moderate         # Balanced isolation
+    allowedTools:
+      - web.search
+      - database.query
+      - file.read
+
+  memory:
+    l1ContextWindow: 100000        # 100K token context
+    l2CacheProvider: "redis://cache.internal:6379"
+    l3ColdStorageProvider: "s3://agents/sessions"
+
+  identity:
+    modelId: claude-3.5-sonnet
+    systemPrompt: |
+      You are a research assistant. Strengths: retrieval, synthesis, clarity.
+      Constraints: cite sources; do not make up data.
 ```
 
-</details>
+### How USAGIX and Myelin-AX Relate
 
-## Appendix
-<details>
-<summary>Expand Appendix</summary>
+| Concept | USAGIX (Spec) | Myelin-AX (Implementation) |
+|---------|---------------|---------------------------|
+| Agent Container | Cognitive Container (abstract) | Kubernetes Pod with agent-brain container |
+| Governance | Governance Enforcement Plane (abstract) | myelin-proxy sidecar + OPA |
+| Tool Execution | Tool Executor (abstract) | myelin-sandbox container with gVisor |
+| Memory Tiers | L1/L2/L3 (abstract paging) | In-memory + Redis + S3 |
+| Identity & Auth | Cryptographic workload identity | Kubernetes ServiceAccount + mTLS |
 
-- Protobuf contracts: [asi.proto](proto/usage/v1/asi.proto)
-- JSON schema: [agent_manifest.schema.json](schemas/agent_manifest.schema.json)
-- Examples: [agent_manifest_basic.yaml](examples/agent_manifest_basic.yaml), [agent_manifest_advanced.yaml](examples/agent_manifest_advanced.yaml)
+For Kubernetes-specific details, see [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md).
 
-</details>
+---
 
-## Status
-- Version: `v0.2-draft`
-- Maturity: Draft for implementer review
-- Intended process: public specification -> reference implementation hardening -> conformance publication
+## Documentation
+
+### Getting Started
+
+- **[docs/getting-started/](docs/getting-started/)** — Quick-start guides by role
+  - **Overview**: What is USAGIX and why it matters
+  - **For Substrate Implementers**: Building a USAGIX-compliant substrate
+  - **For Adopters**: Deploying USAGIX systems in production
+  - **For Policy Authors**: Writing governance policies (OPA)
+
+### Implementation Guides
+
+- **[docs/implementation/](docs/implementation/)** — Platform-specific implementation guides
+  - **Kubernetes** (reference: Myelin-AX) — Operator, CRDs, sidecar enforcement
+  - **Serverless** — AWS Lambda, Google Cloud Run, Azure Functions
+  - **WASM** — Wasmtime, WasmEdge runtimes
+  - **VM-based** — KVM, QEMU, systemd environments
+
+### API & Compliance
+
+- **[docs/api-reference/](docs/api-reference/)** — ASI gRPC API, protobuf definitions, and system call reference
+- **[docs/compliance/](docs/compliance/)** — Compliance profiles (HIPAA, PCI-DSS, SOC2, GDPR)
+- **[docs/governance/](docs/governance/)** — Policy schema definitions and policy authoring examples
+
+### Reference Implementation
+
+- **[reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md)** — Myelin-AX design and USAGIX mapping
+- **[reference/myelin-ax/deployment/](reference/myelin-ax/deployment/)** — Kubernetes manifests and deployment examples
+- **[reference/myelin-ax/policies/](reference/myelin-ax/policies/)** — Example OPA governance policies
+
+### Specifications & Architecture
+
+- **[RFC/](RFC/)** — Request for Comments (formal proposals and approved RFCs)
+- **[architecture/](architecture/)** — Architecture documentation and design decisions
+- **[spec/](spec/)** — Legacy specification documents (being superseded by RFCs)
+
+---
+
+## Community & Governance
+
+### Contributing
+
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — How to contribute (bug reports, RFCs, pull requests)
+- **[CHARTER.md](CHARTER.md)** — Project charter, mission, and governance structure
+
+### Compliance & Security
+
+- **[SECURITY.md](SECURITY.md)** — Security guarantees, vulnerability disclosure, and best practices
+- **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** — Community guidelines
+
+### Roadmap & Adoption
+
+- **[ROADMAP.md](ROADMAP.md)** — Multi-year evolution plan (v1.0 stable → v2.0 breaking changes → CNCF graduation)
+- **[ADOPTERS.md](ADOPTERS.md)** — Organizations implementing USAGIX; how to add your implementation
+
+### Legal
+
+- **[LICENSING.md](LICENSING.md)** — Apache 2.0 license and licensing FAQ
+- **[TRADEMARK_POLICY.md](TRADEMARK_POLICY.md)** — Trademark usage guidelines
+
+---
+
+## Next Steps
+
+### For Specification Readers
+1. Read the [What is USAGIX?](#what-is-usagix) section above
+2. Explore the [Core Concepts table](#core-concepts--specifications) and dive into relevant RFCs
+3. Review [design principles](#design-principles) and [architecture overview](#architecture-overview)
+
+### For Implementers
+1. Start with [Myelin-AX ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md)
+2. Follow the [docs/implementation/](docs/implementation/) guide for your platform (Kubernetes, serverless, WASM, VMs)
+3. Review [RFC-0005 (ASI System Calls)](RFC/rfc-0005-asi-system-calls.md) for gRPC contract details
+
+### For Adopters & Users
+1. Review the [Hello World manifest](#hello-world-agent-manifest) above
+2. See [docs/getting-started/adopters.md](docs/getting-started/adopters.md) for deployment examples
+3. Explore [reference/myelin-ax/policies/](reference/myelin-ax/policies/) for governance policy examples
+
+### For Contributors
+1. Read [CONTRIBUTING.md](CONTRIBUTING.md) for process and DCO requirements
+2. Check [ROADMAP.md](ROADMAP.md) for planned work and contribution areas
+3. Propose significant changes as RFCs using [RFC/README.md](RFC/README.md) process
+
+---
+
+## Project Status
+
+- **Version**: `v0.2-draft`
+- **Maturity**: Draft specification; seeking RFC participants and early implementers
+- **Track**: Public specification → reference implementation (Myelin-AX) → conformance publication → CNCF standardization
+- **License**: Apache 2.0
+- **Governance**: See [GOVERNANCE.md](GOVERNANCE.md)
+
+For the latest updates, see [ROADMAP.md](ROADMAP.md).
