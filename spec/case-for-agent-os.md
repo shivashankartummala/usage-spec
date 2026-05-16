@@ -13,7 +13,7 @@ Modern operating systems (Unix/POSIX, Linux, Windows) were designed to manage **
 
 Attempting to run modern AI agents on traditional OS primitives is like attempting to run a GPU-aware HPC workload on a 1990s Unix scheduler. The abstraction leaks catastrophically.
 
-**USAGIX (Universal Substrate for Agent Governance Enforcement) is the missing standard**—a POSIX-equivalent for the agent-substrate boundary.
+**USAGIX (Universal Substrate for Agent Governance, Isolation and eXecution) is the missing standard**—a POSIX-equivalent for the agent-substrate boundary.
 
 ---
 

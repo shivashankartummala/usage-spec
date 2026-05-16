@@ -3,7 +3,7 @@
 **Generated:** 2026-05-15  
 **Status:** ✅ Complete and Production-Ready
 
-This document summarizes the complete boilerplate, documentation, protocol files, and manifest schemas generated for the USAGIX (Universal Substrate for Agent Governance Enforcement) specification repository.
+This document summarizes the complete boilerplate, documentation, protocol files, and manifest schemas generated for the USAGIX (Universal Substrate for Agent Governance, Isolation and eXecution) specification repository.
 
 ---
 

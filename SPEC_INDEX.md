@@ -1,6 +1,6 @@
 # USAGIX Specification Index
 
-Complete reference for the Universal Substrate for Agent Governance Enforcement (USAGIX) specification suite.
+Complete reference for the Universal Substrate for Agent Governance, Isolation and eXecution (USAGIX) specification suite.
 
 ## Quick Start
 

@@ -1,4 +1,4 @@
-# USAGIX Protocol: Universal Substrate for Agent Governance Enforcement
+# USAGIX Protocol: Universal Substrate for Agent Governance, Isolation and eXecution
 
 **Specification Version**: 1.0.0 | **Status**: Stable (candidate for open standard)  
 **Ecosystem**: Mantle | **API Version**: mantle.sh/v1alpha1
