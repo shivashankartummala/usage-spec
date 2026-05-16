@@ -20,6 +20,49 @@ USAGE is **substrate-agnostic**: a single USAGE specification can be implemented
 - **Trademark Policy**: See [TRADEMARK_POLICY.md](TRADEMARK_POLICY.md)
 - **Versioning Policy**: See [spec/versioning.md](spec/versioning.md)
 
+## Documentation & Resources
+
+### For Specification & Community
+
+- **[ROADMAP.md](ROADMAP.md)** — Multi-year specification evolution plan (v1.0 stable → v2.0 breaking changes → CNCF graduation)
+- **[CHARTER.md](CHARTER.md)** — Project charter, mission, vision, and governance structure
+- **[ADOPTERS.md](ADOPTERS.md)** — Organizations implementing or adopting USAGE; contribution guidelines for adding implementations
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — How to contribute to USAGE (bug reports, RFCs, PRs, DCO signing)
+- **[SECURITY.md](SECURITY.md)** — Security guarantees, vulnerability disclosure, and security best practices
+
+### For Implementation & Development
+
+- **[docs/](docs/)** — Comprehensive documentation organized by role
+  - [docs/getting-started/](docs/getting-started/) — Quick-start guides by role
+  - [docs/implementation/](docs/implementation/) — Platform-specific implementation guides (Kubernetes, serverless, WASM, VM)
+  - [docs/compliance/](docs/compliance/) — Compliance profiles (HIPAA, PCI-DSS, SOC2, GDPR)
+  - [docs/api-reference/](docs/api-reference/) — ASI gRPC API and protobuf reference
+  - [docs/governance/](docs/governance/) — Policy schemas and governance documentation
+
+- **[architecture/](architecture/)** — Architecture documentation and design decisions
+  - [architecture/diagrams/](architecture/diagrams/) — System architecture diagrams
+  - [architecture/documents/](architecture/documents/) — Detailed architecture design documents
+
+- **[RFC/](RFC/)** — Request for Comments process and proposals
+  - [RFC/README.md](RFC/README.md) — RFC process and template
+  - [RFC/rfc-001-lifecycle.md](RFC/rfc-001-lifecycle.md) — Agent lifecycle specification (approved, v1.0)
+
+- **[spec/](spec/)** — Core specification documents
+  - [spec/usage-core.md](spec/usage-core.md) — Core architecture and trust domains
+  - [spec/security-model.md](spec/security-model.md) — Security guarantees and threat model
+  - [spec/memory-model.md](spec/memory-model.md) — Memory virtualization (L1/L2/L3)
+  - [spec/governance-model.md](spec/governance-model.md) — Governance and policy enforcement
+  - [spec/runtime-state-machine.md](spec/runtime-state-machine.md) — Agent lifecycle state machine
+  - [spec/asi-system-calls.md](spec/asi-system-calls.md) — Agent Substrate Interface system calls
+  - [spec/versioning.md](spec/versioning.md) — Versioning policy and backward compatibility
+
+### For Substrate Developers
+
+- **[reference/myelin-ax/](reference/myelin-ax/)** — Kubernetes-native reference implementation
+  - [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) — Myelin-AX design and mapping to USAGE
+  - [reference/myelin-ax/deployment/](reference/myelin-ax/deployment/) — Kubernetes manifests and deployment examples
+  - [reference/myelin-ax/policies/](reference/myelin-ax/policies/) — Example governance policies
+
 ## The Case for an Agent OS
 <details>
 <summary>Expand The Case for an Agent OS</summary>
