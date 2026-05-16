@@ -27,8 +27,14 @@ Rule of boundary enforcement:
 
 Non-compliance at substrate enforcement points MUST result in terminal execution signaling (for example `SIG_AGENT_TERMINATE`).
 
-## 4. Normative Language
-The key words MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY are to be interpreted as described in RFC 2119.
+## 4. Normative Language (Conventions)
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", 
+"RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this specification are to be 
+interpreted as described in BCP 14, RFC 2119 and RFC 8174 when, and only when, they appear 
+in all capitals, as shown here.
+
+All normative statements in this specification are binding on compliant substrates and implementations.
 
 ## 5. Layered Model
 - Layer 4 (Cognitive Application): intent formation, prompt orchestration, tool intent emission.
@@ -199,34 +205,41 @@ When LLM Call Made:
 
 ## 14. Implementation Patterns for Substrate Builders
 
-### 14.1 Sidecar Pattern (Recommended)
+### 14.1 Trust-Domain-Separated Architecture (Recommended)
 
-For untrusted cognitive containers, use a **sidecar architecture**:
+For untrusted cognitive containers, use a **trust-domain-separated architecture** where the Cognitive Container 
+and Governance Enforcement Plane run in separate trust domains (e.g., separate containers, separate processes, separate VMs):
 
 ```
-┌─────────────────────────────┐
-│  Untrusted Agent Container  │
-│  (connects to localhost only)│
-│  ↓                          │
-│  gRPC Client                │
-│  (speaks USAGE ASI)         │
-└─────────────────────────────┘
-         ↕ localhost:50051
-┌─────────────────────────────┐
-│  Sidecar Proxy Container    │
-│  (USAGE Substrate Impl)     │
-│  ✓ Capability validation    │
-│  ✓ Token accounting         │
-│  ✓ Audit logging            │
-│  ✓ Tool mediation           │
-└────────────┬────────────────┘
-         ↕ full network
-┌─────────────────────────────┐
-│  External Tools/Infrastructure │
-└─────────────────────────────┘
+┌─────────────────────────────────────────┐
+│  Cognitive Container (Untrusted)        │
+│  - Agent process, LLM inference calls   │
+│  - Limited network access               │
+│  - gRPC Client to Governance Plane      │
+└────────────┬────────────────────────────┘
+             │ Mediation requests (ASI gRPC)
+             ↓
+┌─────────────────────────────────────────┐
+│  Governance Enforcement Plane (Trusted) │
+│  - USAGE ASI implementation             │
+│  ✓ Capability validation                │
+│  ✓ Token accounting                     │
+│  ✓ Audit logging                        │
+│  ✓ Tool mediation                       │
+└────────────┬────────────────────────────┘
+             │ Validated requests
+             ↓
+┌─────────────────────────────────────────┐
+│  External Tools/Infrastructure          │
+│  (Databases, APIs, services)            │
+└─────────────────────────────────────────┘
 ```
 
-Agent container cannot directly reach external network (no egress). All external access routes through sidecar, which enforces USAGE constraints.
+Cognitive Container cannot directly reach external network (no egress). All external access routes through 
+Governance Enforcement Plane, which enforces USAGE constraints.
+
+**Implementation Note**: See `reference/myelin-ax/ARCHITECTURE.md` for a concrete Kubernetes implementation 
+using sidecar containers.
 
 ### 14.2 Checkpoint Implementation
 

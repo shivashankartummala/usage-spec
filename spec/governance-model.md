@@ -2,6 +2,15 @@
 
 This document details the capability model, policy enforcement engine, quota system, and audit requirements for USAGE-compliant substrates.
 
+## Conventions (Normative Language)
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", 
+"RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this specification are to be 
+interpreted as described in BCP 14, RFC 2119 and RFC 8174 when, and only when, they appear 
+in all capitals, as shown here.
+
+All normative statements in this specification are binding on compliant substrates and implementations.
+
 ## 1. Core Principle: Deny by Default
 
 All external actions (tool invocations, data access, resource allocation) default to **DENIED** unless explicitly authorized. The substrate does not consult the agent for authorization decisions; instead, it validates against the capability ledger.

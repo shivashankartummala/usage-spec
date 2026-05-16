@@ -2,6 +2,15 @@
 
 USAGE implements a **cognitive memory tier system** that differs fundamentally from traditional virtual memory (pages, DRAM, swap). This document specifies how agent context is managed across three tiers: active window (L1), warm cache (L2), and cold storage (L3).
 
+## Conventions (Normative Language)
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", 
+"RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this specification are to be 
+interpreted as described in BCP 14, RFC 2119 and RFC 8174 when, and only when, they appear 
+in all capitals, as shown here.
+
+All normative statements in this specification are binding on compliant substrates and implementations.
+
 ## 1. Core Principle: Virtual Memory for Cognitive Systems
 
 Traditional operating systems manage **physical memory**: DRAM pages are swapped to disk when memory pressure occurs. The OS is agnostic to content; all data is equally expensive to swap.

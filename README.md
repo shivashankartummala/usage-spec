@@ -1,9 +1,24 @@
 # USAGE: Universal Substrate for Agent Governance Enforcement
 
-## Executive Summary
+**Specification Version**: 1.0.0 | **Status**: Stable (candidate for open standard)
+
+## What is USAGE?
+
 USAGE is an open interface specification for executing autonomous agent processes under strict substrate governance. It standardizes the boundary between cognitive workloads and execution substrates, analogous to the role of POSIX between applications and operating systems. USAGE defines control-plane and data-plane contracts for lifecycle, signaling, memory paging, tool mediation, quota enforcement, and auditability.
 
-Myelin-AX is the Kubernetes-native reference implementation of USAGE. It uses CRDs, an operator, mutating admission, and sidecar-based governance to enforce zero-trust execution semantics for agent processes.
+USAGE is **substrate-agnostic**: a single USAGE specification can be implemented by Kubernetes substrates, serverless platforms, WASM runtimes, or traditional VMs. The spec defines the abstract trust-domain-separated architecture; each substrate implements the plumbing differently.
+
+## Reference Implementation
+
+**Myelin-AX** is a Kubernetes-native reference implementation of USAGE. It uses CRDs, an operator, mutating admission, and sidecar-based governance to enforce zero-trust execution semantics for agent processes. See [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) for Myelin-AX specific details.
+
+## Governance & Legal
+
+- **License**: Apache 2.0 — see [LICENSING.md](LICENSING.md)
+- **Governance Model**: See [GOVERNANCE.md](GOVERNANCE.md)
+- **Code of Conduct**: See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+- **Trademark Policy**: See [TRADEMARK_POLICY.md](TRADEMARK_POLICY.md)
+- **Versioning Policy**: See [spec/versioning.md](spec/versioning.md)
 
 ## The Case for an Agent OS
 <details>
@@ -86,17 +101,15 @@ Detailed specification: [usage-core.md](spec/usage-core.md)
 </details>
 
 ## Runtime Architecture
-<details>
-<summary>Expand Runtime Architecture</summary>
 
-Myelin-AX enforces USAGE through out-of-process supervision:
-- `agent-brain`: untrusted cognition container.
-- `myelin-proxy`: privileged governance sidecar implementing ASI server.
-- `myelin-sandbox`: ephemeral isolated compute worker for untrusted tool execution.
+USAGE enforces strict trust-domain separation:
+- **Cognitive Container** (Untrusted): Agent process running LLM inference and user logic
+- **Governance Enforcement Plane** (Trusted): Mediation layer validating capabilities, enforcing policies, and auditing decisions
+- **Tool Executor** (Isolated): Sandboxed execution of external tools with per-tool isolation
 
-Kubernetes topology and flow diagrams: [kubernetes-architecture.md](spec/kubernetes-architecture.md)
+All external actions from the Cognitive Container route through the Governance Enforcement Plane for validation, logging, and constraint enforcement.
 
-</details>
+**Implementation Note**: See [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) for a concrete Kubernetes-based implementation using sidecar containers.
 
 ## System Calls (ASI)
 <details>
@@ -116,35 +129,31 @@ System-call semantics: [asi-system-calls.md](spec/asi-system-calls.md)
 </details>
 
 ## Security Model
-<details>
-<summary>Expand Security Model</summary>
 
 Source: [security-model.md](spec/security-model.md)
 
-## Objectives
+### Objectives
 - Constrain blast radius of compromised cognition workloads.
 - Prevent direct credential and network exfiltration.
 - Enforce policy on every side effect.
 
-## Mandatory Controls
-- Sidecar governance enforcement out-of-process.
+### Mandatory Controls
+- Trust-domain-separated governance (out-of-process or equivalent).
 - Least-privilege tool capability allowlists.
 - Runtime sandboxing for dynamic code execution.
-- Immutable audit trail for syscall decisions.
+- Immutable audit trail for all decisions.
 - Identity-bound quotas and policy snapshots.
 
-## Trust Domains
-- Domain A: Untrusted cognition (`agent-brain`).
-- Domain B: Trusted governance (`myelin-proxy`).
-- Domain C: Isolated executor (`myelin-sandbox`).
-- Domain D: Control plane (operator, admission, policy backend).
+### Trust Domains
+- **Domain A**: Untrusted Cognitive Container (agent process)
+- **Domain B**: Trusted Governance Enforcement Plane (substrate mediation layer)
+- **Domain C**: Isolated Tool Executors (ephemeral sandbox)
+- **Domain D**: Control Plane (operators, policies, audit logs)
 
-## Security Invariants
-- A cannot directly invoke D or external networks.
-- A -> side effects MUST traverse B.
-- C instances are ephemeral and non-reusable.
-
-</details>
+### Security Invariants
+- Domain A cannot directly invoke Domain D or external networks.
+- All Domain A side effects MUST traverse Domain B for validation.
+- Domain C instances are ephemeral and isolated per tool execution.
 
 ## Memory Model
 <details>
@@ -256,16 +265,12 @@ USAGE models agent orchestration as a supervision tree.
 
 </details>
 
-## Kubernetes Integration
-<details>
-<summary>Expand Kubernetes Integration</summary>
+## Kubernetes Implementation (Myelin-AX)
 
-Reference CRDs and lifecycle mappings:
-- [sovereignagent.example.yaml](crds/sovereignagent.example.yaml)
-- [agentsession.example.yaml](crds/agentsession.example.yaml)
-- [rfc-001-lifecycle.md](spec/rfc-001-lifecycle.md)
-
-</details>
+For Kubernetes-specific implementation details, CRDs, and deployment examples:
+- See [reference/myelin-ax/ARCHITECTURE.md](reference/myelin-ax/ARCHITECTURE.md) for system design
+- See [reference/myelin-ax/deployment/](reference/myelin-ax/deployment/) for Kubernetes manifests
+- See [reference/myelin-ax/policies/](reference/myelin-ax/policies/) for policy examples
 
 ## Compliance Suite
 <details>

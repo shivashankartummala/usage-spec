@@ -2,6 +2,15 @@
 
 This document specifies the security architecture, threat model, and defense mechanisms for USAGE-compliant substrates.
 
+## Conventions (Normative Language)
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", 
+"RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this specification are to be 
+interpreted as described in BCP 14, RFC 2119 and RFC 8174 when, and only when, they appear 
+in all capitals, as shown here.
+
+All normative statements in this specification are binding on compliant substrates and implementations.
+
 ## 1. Threat Model
 
 ### 1.1 Assumptions About the Adversary
@@ -52,7 +61,7 @@ USAGE assumes the adversary controls **the agent process itself** but NOT the su
 
 USAGE defines four trust domains with explicit boundaries:
 
-### 2.1 Domain A: Untrusted Cognitive Container (Agent Brain)
+### 2.1 Domain A: Untrusted Cognitive Container
 
 **Components**:
 - Agent process running user-provided logic
@@ -61,13 +70,13 @@ USAGE defines four trust domains with explicit boundaries:
 
 **Trust Level**: UNTRUSTED (adversarial)
 **Security Model**: Sandbox—agent is confined and cannot access resources except through mediation
-**Network Access**: BLOCKED (localhost:50051 to substrate only)
+**Network Access**: BLOCKED (local mediation endpoint to governance enforcement plane only)
 **Filesystem Access**: NONE (read-only mount for code, no write access)
 **Capabilities**: Can call substrate APIs only
 
 ```
 ┌──────────────────────────────────────────┐
-│     Domain A: Untrusted Agent Brain      │
+│  Domain A: Untrusted Cognitive Container │
 │                                          │
 │  ┌────────────────────────────────────┐  │
 │  │ Agent Process                      │  │
@@ -76,25 +85,25 @@ USAGE defines four trust domains with explicit boundaries:
 │  │ - Working memory                   │  │
 │  └────────────────────────────────────┘  │
 │                                          │
-│  Network: BLOCKED (except localhost)     │
+│  Network: BLOCKED (except local endpoint)│
 │  Filesystem: READ-ONLY                   │
 │  Secrets: UNAVAILABLE                    │
 └──────────────────────────────────────────┘
-           ↓ gRPC localhost:50051
+        ↓ USAGE ASI (gRPC or equivalent)
     [TRUST BOUNDARY]
 ```
 
-### 2.2 Domain B: Trusted Governance Substrate (Myelin Proxy)
+### 2.2 Domain B: Trusted Governance Enforcement Plane
 
 **Components**:
-- USAGE ASI implementation (gRPC service)
+- USAGE ASI implementation (gRPC or equivalent service)
 - Capability ledger and policy engine
 - Token accounting system
 - Audit logging system
 - Output scrubbing pipeline
 - Tool mediation layer
 
-**Trust Level**: TRUSTED (substrate is secure)
+**Trust Level**: TRUSTED (substrate implementation is secure and trustworthy)
 **Security Model**: Cannot be compromised; assuming secure implementation
 **Network Access**: Full (reaches tools, databases, external services)
 **Filesystem Access**: Full (reads policies, writes audit logs, accesses secrets)
@@ -102,10 +111,10 @@ USAGE defines four trust domains with explicit boundaries:
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│     Domain B: Trusted Governance Substrate               │
+│  Domain B: Trusted Governance Enforcement Plane          │
 │                                                          │
 │  ┌────────────────────────────────────────────────────┐  │
-│  │ USAGE Substrate (Myelin-AX or equivalent)          │  │
+│  │ USAGE Substrate Implementation                     │  │
 │  │ - Capability validation                            │  │
 │  │ - Token accounting                                 │  │
 │  │ - Policy enforcement                               │  │
@@ -120,6 +129,8 @@ USAGE defines four trust domains with explicit boundaries:
 └──────────────────────────────────────────────────────────┘
     ↓ mediated calls    ↓ governance decisions
 ```
+
+**Implementation Note**: See `reference/myelin-ax/ARCHITECTURE.md` for a concrete Kubernetes-based implementation.
 
 ### 2.3 Domain C: Isolated Tool Executors (Sandboxes)
 

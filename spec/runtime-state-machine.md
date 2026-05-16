@@ -2,6 +2,15 @@
 
 This document provides detailed specifications for the agent state machine, including state definitions, transition rules, and formal semantics.
 
+## Conventions (Normative Language)
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", 
+"RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this specification are to be 
+interpreted as described in BCP 14, RFC 2119 and RFC 8174 when, and only when, they appear 
+in all capitals, as shown here.
+
+All normative statements in this specification are binding on compliant substrates and implementations.
+
 ## 1. State Definitions
 
 USAGE defines exactly **5 states** in the agent lifecycle:
