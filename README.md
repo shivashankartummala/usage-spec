@@ -5,6 +5,11 @@ USAGE is an open interface specification for executing autonomous agent processe
 
 Myelin-AX is the Kubernetes-native reference implementation of USAGE. It uses CRDs, an operator, mutating admission, and sidecar-based governance to enforce zero-trust execution semantics for agent processes.
 
+## The Case for an Agent OS
+USAGE addresses not only technical orchestration but also enterprise governance and liability requirements for autonomous digital workers.
+
+See: [case-for-agent-os.md](spec/case-for-agent-os.md)
+
 ## Problem Statement
 Current agent deployments exhibit five systemic failures:
 - Security paradox: high-privilege agents with weak containment and broad network reach.
